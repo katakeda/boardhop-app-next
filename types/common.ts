@@ -13,8 +13,10 @@ export type AppPropsWithLayout = AppProps & {
 export type ErrorString = string | null;
 
 export enum Rate {
-  HOUR,
-  DAY,
+  HOUR = 'hour',
+  DAY = 'day',
+  WEEK = 'week',
+  MONTH = 'month',
 }
 
 export interface PickupLocation {
@@ -23,8 +25,8 @@ export interface PickupLocation {
 }
 
 export enum MediaType {
-  IMAGE,
-  VIDEO,
+  IMAGE = 'image',
+  VIDEO = 'video',
 }
 
 export interface PostMedia {
@@ -62,7 +64,7 @@ export interface Request<T> {
 export interface User {
   id: string;
   username: string;
-  email: string;
+  email?: string;
   avatarUrl: string;
 }
 
