@@ -2,11 +2,15 @@ import React from 'react';
 import Image from 'next/image';
 import UserIcon from '@heroicons/react/outline/UserIcon';
 import { usePostsContext } from '../../contexts/PostsContext';
-import { MediaType, Post, PostsParams } from '../../types/common';
+import { MediaType, Post, PostsParams, Rate } from '../../types/common';
 import { DEFAULT_POST_IMAGE_LINK } from '../../utils/constants';
 import { useGetPosts } from '../../utils/posts';
 
 interface PostsProps {}
+
+const RateMap: Record<Rate, string> = {} as Record<Rate, string>;
+RateMap[Rate.HOUR] = '時';
+RateMap[Rate.DAY] = '日';
 
 export const Posts: React.FC<PostsProps> = () => {
   const { postsParams, updatePostsParams } = usePostsContext();
@@ -34,8 +38,8 @@ export const Posts: React.FC<PostsProps> = () => {
       </div>
       <div className="flex flex-col gap-4 w-full">
         {posts.map((post: Post) => {
-          const [topImage, ...images] = post.medias.filter((media) => media.type === MediaType.IMAGE);
-          const topImageUrl = topImage ? topImage.url : DEFAULT_POST_IMAGE_LINK;
+          const [topImage, ...images] = post.medias.filter((media) => media.type === MediaType.IMAGE)
+          const topImageUrl = topImage && topImage.url ? topImage.url : DEFAULT_POST_IMAGE_LINK;
 
           return (
             <div key={post.id} className="flex flex-col bg-white shadow-lg rounded-lg divide-y-2 w-full h-64">
@@ -56,7 +60,7 @@ export const Posts: React.FC<PostsProps> = () => {
                   <span className="text-sm text-gray-500 font-semibold">{post.user.username}</span>
                 </span>
                 <span className="p-2">
-                  <p className="text-gray-500 text-lg font-bold font-mono">{post.price}円/{post.rate}</p>
+                  <p className="text-gray-500 text-lg font-bold font-mono">{post.price}円/{RateMap[post.rate]}</p>
                 </span>
               </div>
             </div>
