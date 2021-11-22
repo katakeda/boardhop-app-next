@@ -9,10 +9,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  // const url = process.env.BACKEND_API_ENDPOINT ?? '';
-  const url = 'http://localhost:8080/posts';
   const options = { method: 'GET' };
-  const response = await fetch(url, options);
+  const response = await fetch(process.env.BACKEND_API_ENDPOINT + '/posts', options);
   const results = await response.json();
 
   const posts = results.map((result: any): Post => {
