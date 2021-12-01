@@ -5,10 +5,10 @@ type Data = {
   posts: Array<Post>;
 }
 
-export default async function handler(
+const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<Data>
-) {
+) => {
   const options = { method: 'GET' };
   const response = await fetch(process.env.BACKEND_API_ENDPOINT + '/posts', options);
   const results = await response.json();
@@ -40,3 +40,5 @@ export default async function handler(
 
   res.status(200).json({ posts })
 }
+
+export default handler;
