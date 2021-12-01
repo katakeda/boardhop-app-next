@@ -1,6 +1,6 @@
-import React from 'react';
-import Image from 'next/image';
 import UserIcon from '@heroicons/react/outline/UserIcon';
+import Image from 'next/image';
+import React from 'react';
 import { usePostsContext } from '../../contexts/PostsContext';
 import { MediaType, Post, PostsParams, Rate } from '../../types/common';
 import { DEFAULT_POST_IMAGE_LINK } from '../../utils/constants';

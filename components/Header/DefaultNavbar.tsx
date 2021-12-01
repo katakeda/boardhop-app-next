@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { ChevronRightIcon, MenuIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
-import { MenuIcon, ChevronRightIcon } from '@heroicons/react/outline';
+import React, { useState } from 'react';
 
 interface DefaultNavbarProps {
 

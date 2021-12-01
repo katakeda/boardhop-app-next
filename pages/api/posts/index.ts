@@ -1,5 +1,5 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { MediaType, Post, PostMedia, User } from '../../../types/common'
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { MediaType, Post, PostMedia, User } from '../../../types/common';
 
 type Data = {
   posts: Array<Post>;

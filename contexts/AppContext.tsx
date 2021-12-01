@@ -1,4 +1,4 @@
-import React, { useContext, createContext, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import type { ErrorString } from '../types/common';
 
 interface AppData {

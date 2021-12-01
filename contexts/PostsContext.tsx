@@ -1,8 +1,5 @@
-import React, { useContext, createContext, useState } from 'react'
-import useSWR, { Key, SWRResponse } from 'swr';
-import { PickupLocation, Post, PostsParams } from '../types/common';
-import { asyncRequest } from '../utils/common';
-import { GET_POSTS_API_ENDPOINT } from '../utils/constants';
+import React, { createContext, useContext, useState } from 'react';
+import { PostsParams } from '../types/common';
 import { useAppContext } from './AppContext';
 
 interface PostsData {

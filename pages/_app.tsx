@@ -1,6 +1,6 @@
 import React from 'react';
-import type { AppPropsWithLayout } from '../types/common';
 import '../styles/globals.css';
+import type { AppPropsWithLayout } from '../types/common';
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   // Use the layout defined at the page level, if available
