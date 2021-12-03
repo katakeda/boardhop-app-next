@@ -5,8 +5,6 @@ import { usePostsContext } from '../../contexts/PostsContext';
 import { MediaType, Post, PostsParams, Rate } from '../../types/common';
 import { DEFAULT_POST_IMAGE_LINK } from '../../utils/constants';
 
-interface PostsProps { }
-
 const RateMap: Record<Rate, string> = {} as Record<Rate, string>;
 RateMap[Rate.HOUR] = '時';
 RateMap[Rate.DAY] = '日';
@@ -21,25 +19,19 @@ interface SkillLevel extends Tag { }
 
 interface Brand extends Tag { }
 
-const SkillLevels: Array<SkillLevel> = [
+// TODO: Replace with actual data
+const MockSkillLevels: Array<SkillLevel> = [
   { id: '1', label: '初心者', value: 'Beginner' },
   { id: '2', label: '中級者', value: 'Intermediate' },
   { id: '3', label: '上級者', value: 'Advanced' },
 ]
 
-const Brands: Array<Brand> = [
+// TODO: Replace with actual data
+const MockBrands: Array<Brand> = [
   { id: '1', label: 'JS', value: 'JS' },
   { id: '2', label: 'Mayhem', value: 'Mayhem' },
   { id: '3', label: 'Burton', value: 'Burton' },
 ]
-
-const initialPostsParams: PostsParams = {
-  type: '',
-  categories: new Set(),
-  skillLevels: new Set(),
-  brands: new Set(),
-  page: '0',
-}
 
 interface TagsProps {
   label: string;
@@ -71,10 +63,80 @@ const Tags: React.FC<TagsProps> = ({ label, name, tags, params, handler }) => {
   )
 }
 
+interface Category {
+  id: string;
+  label: string;
+  value: string;
+  children: Array<Category> | null;
+}
+
+// TODO: Replace with actual data
+const MockRootCategory: Category = {
+  id: '1',
+  label: '全てのカテゴリー',
+  value: 'root',
+  children: [
+    {
+      id: '2', label: 'サーフボード', value: 'surfboard', children: [
+        { id: '4', label: 'ショートボード', value: 'shortboard', children: [
+          { id: '6', label: 'EPS', value: 'eps', children: null },
+          { id: '7', label: 'PU', value: 'pu', children: null },
+        ] },
+        { id: '5', label: 'ロングボード', value: 'longboard', children: null },
+      ]
+    },
+    { id: '3', label: 'スノーボード', value: 'snowboard', children: null },
+  ]
+}
+
+interface CategoryTreeProps {
+  category: Category;
+  depth: number;
+}
+
+const CategoryTree: React.FC<CategoryTreeProps> = ({ category, depth }) => {
+  const { postsParams, updatePostsParams } = usePostsContext();
+
+  const handleClick = () => {
+    updatePostsParams({ ...postsParams, categories: new Set([category.value]) });
+  }
+
+  return (
+    <div>
+      {Array(depth).fill('　').map((d, index) => <span key={index}>{d}</span>)}
+      <span className="border-b-2" onClick={handleClick}>{category.label}</span>
+      {category.children && category.children.map((child: Category) => (<CategoryTree key={child.id} category={child} depth={depth+1} />))}
+    </div>
+  )
+}
+
+interface CategoriesProps { }
+
+const Categories: React.FC<CategoriesProps> = () => {
+  return (
+    <div className="divide-y-2 divide-gray-300 w-full">
+      <p>カテゴリー</p>
+      <div>
+        <CategoryTree category={MockRootCategory} depth={0} />
+      </div>
+    </div>
+  )
+}
+
+const initialPostsParams: PostsParams = {
+  type: '',
+  categories: new Set(),
+  skillLevels: new Set(),
+  brands: new Set(),
+  page: '0',
+}
+
+interface PostsProps { }
+
 export const Posts: React.FC<PostsProps> = () => {
   const [filterMenu, setFilterMenu] = useState<boolean>(false);
   const [localPostsParams, setLocalPostsParams] = useState<PostsParams>(initialPostsParams);
-  const { posts, isLoading, isError, postsParams, updatePostsParams } = usePostsContext();
+  const { posts, isLoading, isError, updatePostsParams } = usePostsContext();
 
   const toggleFilterMenu = () => setFilterMenu((prev) => !prev);
 
@@ -109,9 +171,10 @@ export const Posts: React.FC<PostsProps> = () => {
         <span><button className="py-2 px-3 bg-green-600 text-white rounded-md" onClick={() => { }}>Map</button></span>
       </div>
       {filterMenu && (
-        <div className="flex flex-col items-center md:hidden w-full">
-          <Tags label="スキルレベル" name="skill_level" tags={SkillLevels} params={localPostsParams.skillLevels} handler={handleSkillLevelChange} />
-          <Tags label="ブランド" name="brand" tags={Brands} params={localPostsParams.brands} handler={handleBrandChange} />
+        <div className="flex flex-col items-center w-full">
+          <Categories />
+          <Tags label="スキルレベル" name="skill_level" tags={MockSkillLevels} params={localPostsParams.skillLevels} handler={handleSkillLevelChange} />
+          <Tags label="ブランド" name="brand" tags={MockBrands} params={localPostsParams.brands} handler={handleBrandChange} />
           <div className="w-full my-2"><button className="py-2 px-3 bg-gray-900 text-white rounded-md w-full" onClick={handleFilter}>更新する</button></div>
         </div>
       )}

@@ -13,8 +13,8 @@ const handler = async (
   if (req.query.tags) {
     queryArr.push(`tags=${req.query.tags}`);
   }
-  if (req.query.categories) {
-    queryArr.push(`cats=${req.query.categories}`);
+  if (req.query.cats) {
+    queryArr.push(`cats=${req.query.cats}`);
   }
   const options = { method: 'GET' };
   const response = await fetch(`${process.env.BACKEND_API_ENDPOINT}/posts?${queryArr.join('&')}`, options);
