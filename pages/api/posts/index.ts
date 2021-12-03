@@ -9,8 +9,15 @@ const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) => {
+  let queryArr: Array<string> = [];
+  if (req.query.tags) {
+    queryArr.push(`tags=${req.query.tags}`);
+  }
+  if (req.query.categories) {
+    queryArr.push(`cats=${req.query.categories}`);
+  }
   const options = { method: 'GET' };
-  const response = await fetch(process.env.BACKEND_API_ENDPOINT + '/posts', options);
+  const response = await fetch(`${process.env.BACKEND_API_ENDPOINT}/posts?${queryArr.join('&')}`, options);
   const results = await response.json();
 
   const posts = results.map((result: any): Post => {

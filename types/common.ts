@@ -74,7 +74,7 @@ export interface PaginateParams {
 
 export interface PostsParams extends PaginateParams {
   type: string;
-  category?: string;
-  skillLevel?: string;
-  brand?: string;
+  categories?: Set<string>;
+  skillLevels?: Set<string>;
+  brands?: Set<string>;
 }
