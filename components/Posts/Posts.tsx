@@ -51,20 +51,22 @@ interface TagsProps {
 
 const Tags: React.FC<TagsProps> = ({ label, name, tags, params, handler }) => {
   return (
-    <div>
+    <div className="divide-y-2 divide-gray-300 w-full">
       <p>{label}</p>
-      {tags.map((tag: Tag) => (
-        <div key={tag.id}>
-          <input
-            type="checkbox"
-            name={name}
-            value={tag.value}
-            onChange={handler}
-            checked={params?.has(tag.value)}
-          />
-          {' ' + tag.label}
-        </div>
-      ))}
+      <div>
+        {tags.map((tag: Tag) => (
+          <div key={tag.id}>
+            <input
+              type="checkbox"
+              name={name}
+              value={tag.value}
+              onChange={handler}
+              checked={params?.has(tag.value)}
+            />
+            {' ' + tag.label}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -101,16 +103,16 @@ export const Posts: React.FC<PostsProps> = () => {
 
   return (
     <div className="flex flex-col items-center bg-gray-100 h-full px-2">
-      <div className="flex w-full justify-evenly border-b-2 border-gray-300 my-3">
-        <span><button onClick={toggleFilterMenu}>Filter</button></span>
-        <span>View</span>
-        <span>Map</span>
+      <div className="flex w-full justify-evenly my-3">
+        <span><button className="py-2 px-3 bg-green-600 text-white rounded-md" onClick={toggleFilterMenu}>Filter</button></span>
+        <span><button className="py-2 px-3 bg-green-600 text-white rounded-md" onClick={() => { }}>View</button></span>
+        <span><button className="py-2 px-3 bg-green-600 text-white rounded-md" onClick={() => { }}>Map</button></span>
       </div>
       {filterMenu && (
-        <div className="md:hidden">
+        <div className="flex flex-col items-center md:hidden w-full">
           <Tags label="スキルレベル" name="skill_level" tags={SkillLevels} params={localPostsParams.skillLevels} handler={handleSkillLevelChange} />
           <Tags label="ブランド" name="brand" tags={Brands} params={localPostsParams.brands} handler={handleBrandChange} />
-          <div><button onClick={handleFilter}>更新する</button></div>
+          <div className="w-full my-2"><button className="py-2 px-3 bg-gray-900 text-white rounded-md w-full" onClick={handleFilter}>更新する</button></div>
         </div>
       )}
       <div className="flex flex-col gap-4 w-full">
