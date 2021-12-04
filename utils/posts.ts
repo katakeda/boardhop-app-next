@@ -38,6 +38,23 @@ export const useGetPosts = (postsParams: PostsParams) => {
   }
 }
 
+export const useGetPost = (id: string | Array<string> | undefined): { post: Post, isLoading: boolean, isError: boolean } => {
+  if (typeof id !== 'string') {
+    id = '';
+  }
+
+  const options = { method: 'GET' };
+  const url = `${GET_POSTS_API_ENDPOINT}/${id}`;
+  const fetcher = () => fetch(url, options).then(res => res.json());
+  const { data, error } = useSWR(url, fetcher);
+
+  return {
+    post: data?.post ?? {},
+    isLoading: !data && !error,
+    isError: !!error,
+  }
+}
+
 export const generateMockPost = (): Post => {
   const id = Math.round(Math.random()*100).toString();
   const user = { id: '1', username: 'test', email: 'test@example.com', avatarUrl: '' };
