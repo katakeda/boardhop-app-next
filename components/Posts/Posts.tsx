@@ -2,12 +2,8 @@ import UserIcon from '@heroicons/react/outline/UserIcon';
 import Image from 'next/image';
 import React, { BaseSyntheticEvent, useState } from 'react';
 import { usePostsContext } from '../../contexts/PostsContext';
-import { MediaType, Post, PostsParams, Rate } from '../../types/common';
-import { DEFAULT_POST_IMAGE_LINK } from '../../utils/constants';
-
-const RateMap: Record<Rate, string> = {} as Record<Rate, string>;
-RateMap[Rate.HOUR] = '時';
-RateMap[Rate.DAY] = '日';
+import { MediaType, Post, PostsParams } from '../../types/common';
+import { DEFAULT_POST_IMAGE_LINK, RateMap } from '../../utils/constants';
 
 interface Tag {
   id: string;

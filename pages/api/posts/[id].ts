@@ -24,7 +24,6 @@ const handler = async (
     type: MediaType.IMAGE,
   }
 
-  console.log({ results });
   const post: Post = {
     id: results.id,
     title: results.title,
