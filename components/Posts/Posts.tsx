@@ -74,10 +74,12 @@ const MockRootCategory: Category = {
   children: [
     {
       id: '2', label: 'サーフボード', value: 'surfboard', children: [
-        { id: '4', label: 'ショートボード', value: 'shortboard', children: [
-          { id: '6', label: 'EPS', value: 'eps', children: null },
-          { id: '7', label: 'PU', value: 'pu', children: null },
-        ] },
+        {
+          id: '4', label: 'ショートボード', value: 'shortboard', children: [
+            { id: '6', label: 'EPS', value: 'eps', children: null },
+            { id: '7', label: 'PU', value: 'pu', children: null },
+          ]
+        },
         { id: '5', label: 'ロングボード', value: 'longboard', children: null },
       ]
     },
@@ -101,7 +103,7 @@ const CategoryTree: React.FC<CategoryTreeProps> = ({ category, depth }) => {
     <div>
       {Array(depth).fill('　').map((d, index) => <span key={index}>{d}</span>)}
       <span className="border-b-2" onClick={handleClick}>{category.label}</span>
-      {category.children && category.children.map((child: Category) => (<CategoryTree key={child.id} category={child} depth={depth+1} />))}
+      {category.children && category.children.map((child: Category) => (<CategoryTree key={child.id} category={child} depth={depth + 1} />))}
     </div>
   )
 }
@@ -125,6 +127,40 @@ const initialPostsParams: PostsParams = {
   skillLevels: new Set(),
   brands: new Set(),
   page: '0',
+}
+
+interface PostComponentProps {
+  post: Post;
+}
+
+const PostComponent: React.FC<PostComponentProps> = ({ post }) => {
+  const [topImage, ...images] = post.medias.filter((media) => media.type === MediaType.IMAGE)
+  const topImageUrl = topImage && topImage.url ? topImage.url : DEFAULT_POST_IMAGE_LINK;
+
+  return (
+    <div key={post.id} className="flex flex-col bg-white shadow-lg rounded-lg divide-y-2 w-full h-64">
+      <div className="relative w-full h-3/4">
+        <Image className="rounded-t-lg" src={topImageUrl} alt={post.title} layout="fill" objectFit="cover" />
+        <p className="absolute inset-x-0 bottom-0 text-white p-2">{post.title}</p>
+      </div>
+      <div className="flex justify-between items-end w-full h-1/4">
+        <span className="flex gap-2 justify-between items-end p-2 h-full">
+          <span className="w-full h-full bg-gray-300 rounded-md">
+            {post.user.avatarUrl
+              ? <span className="relative">
+                <Image src={post.user.avatarUrl} alt="user-avatar" layout="fill" objectFit="cover" />
+              </span>
+              : <UserIcon className="p-2 w-full h-full" />
+            }
+          </span>
+          <span className="text-sm text-gray-500 font-semibold">{post.user.username}</span>
+        </span>
+        <span className="p-2">
+          <p className="text-gray-500 text-lg font-bold font-mono">{post.price}円/{RateMap[post.rate]}</p>
+        </span>
+      </div>
+    </div>
+  )
 }
 
 interface PostsProps { }
@@ -175,35 +211,14 @@ export const Posts: React.FC<PostsProps> = () => {
         </div>
       )}
       <div className="flex flex-col gap-4 w-full">
-        {posts.map((post: Post) => {
-          const [topImage, ...images] = post.medias.filter((media) => media.type === MediaType.IMAGE)
-          const topImageUrl = topImage && topImage.url ? topImage.url : DEFAULT_POST_IMAGE_LINK;
-
-          return (
-            <div key={post.id} className="flex flex-col bg-white shadow-lg rounded-lg divide-y-2 w-full h-64">
-              <div className="relative w-full h-3/4">
-                <Image className="rounded-t-lg" src={topImageUrl} alt={post.title} layout="fill" objectFit="cover" />
-                <p className="absolute inset-x-0 bottom-0 text-white p-2">{post.title}</p>
-              </div>
-              <div className="flex justify-between items-end w-full h-1/4">
-                <span className="flex gap-2 justify-between items-end p-2 h-full">
-                  <span className="w-full h-full bg-gray-300 rounded-md">
-                    {post.user.avatarUrl
-                      ? <span className="relative">
-                        <Image src={post.user.avatarUrl} alt="user-avatar" layout="fill" objectFit="cover" />
-                      </span>
-                      : <UserIcon className="p-2 w-full h-full" />
-                    }
-                  </span>
-                  <span className="text-sm text-gray-500 font-semibold">{post.user.username}</span>
-                </span>
-                <span className="p-2">
-                  <p className="text-gray-500 text-lg font-bold font-mono">{post.price}円/{RateMap[post.rate]}</p>
-                </span>
-              </div>
-            </div>
-          )
-        })}
+        {posts.length > 0
+          ? posts.map((post: Post, index: number) => (
+            <PostComponent key={index} post={post} />
+          ))
+          : <div className="w-full text-center text-gray-500">
+            <p>検索結果が見つかりませんでした</p>
+          </div>
+        }
       </div>
     </div>
   );

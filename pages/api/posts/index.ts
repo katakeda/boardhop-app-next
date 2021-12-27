@@ -3,6 +3,7 @@ import { MediaType, Post, PostMedia, User } from '../../../types/common';
 
 type Data = {
   posts: Array<Post>;
+  error?: string | null;
 }
 
 const handler = async (
@@ -18,6 +19,11 @@ const handler = async (
   }
   const options = { method: 'GET' };
   const response = await fetch(`${process.env.BACKEND_API_ENDPOINT}/posts?${queryArr.join('&')}`, options);
+
+  if (response.status >= 400) {
+    return res.status(response.status).json({ posts: [], error: response.statusText });
+  }
+
   const results = await response.json();
 
   const posts = results.map((result: any): Post => {
