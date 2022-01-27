@@ -2,7 +2,7 @@ import UserIcon from '@heroicons/react/outline/UserIcon';
 import Image from 'next/image';
 import React, { BaseSyntheticEvent, useState } from 'react';
 import { usePostsContext } from '../../contexts/PostsContext';
-import { MediaType, Post, PostsParams } from '../../types/common';
+import { Category, MediaType, Post, PostsParams } from '../../types/common';
 import { DEFAULT_POST_IMAGE_LINK, RateMap } from '../../utils/constants';
 
 interface Tag {
@@ -57,13 +57,6 @@ const Tags: React.FC<TagsProps> = ({ label, name, tags, params, handler }) => {
       </div>
     </div>
   )
-}
-
-interface Category {
-  id: string;
-  label: string;
-  value: string;
-  children: Array<Category> | null;
 }
 
 // TODO: Replace with actual data

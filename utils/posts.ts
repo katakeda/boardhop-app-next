@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import { MediaType, PickupLocation, Post, PostMedia, PostsParams, Rate } from "../types/common";
-import { DEFAULT_POST_IMAGE_LINK, GET_POSTS_API_ENDPOINT } from "./constants";
+import { DEFAULT_POST_IMAGE_LINK, POSTS_API_ENDPOINT } from "./constants";
 
 export const useGetPosts = (postsParams: PostsParams) => {
   let queryArr: Array<string> = [];
@@ -27,7 +27,7 @@ export const useGetPosts = (postsParams: PostsParams) => {
   }
 
   const options = { method: 'GET' };
-  const url = `${GET_POSTS_API_ENDPOINT}?${queryArr.join('&')}`;
+  const url = `${POSTS_API_ENDPOINT}?${queryArr.join('&')}`;
   const fetcher = () => fetch(url, options).then(res => res.json());
   const { data, error } = useSWR(url, fetcher);
 
@@ -38,13 +38,13 @@ export const useGetPosts = (postsParams: PostsParams) => {
   }
 }
 
-export const useGetPost = (id: string | Array<string> | undefined): { post: Post, isLoading: boolean, isError: boolean } => {
+export const useGetPost = (id: string | Array<string> | undefined) => {
   if (typeof id !== 'string') {
     id = '';
   }
 
   const options = { method: 'GET' };
-  const url = `${GET_POSTS_API_ENDPOINT}/${id}`;
+  const url = `${POSTS_API_ENDPOINT}/${id}`;
   const fetcher = () => fetch(url, options).then(res => res.json());
   const { data, error } = useSWR(url, fetcher);
 
@@ -55,8 +55,51 @@ export const useGetPost = (id: string | Array<string> | undefined): { post: Post
   }
 }
 
+interface NewPostData {
+  userId: number;
+  title: string;
+  description: string;
+  price: number;
+  rate: Rate;
+  pickupLocation?: PickupLocation;
+  imageData?: FormData;
+}
+
+export const submitPost = async (data: NewPostData) => {
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  };
+
+  try {
+    const response = await fetch(POSTS_API_ENDPOINT, options);
+
+    if (response.status >= 300) {
+      return {
+        post: null,
+        error: response.statusText,
+      }
+    }
+
+    const data = await response.json();
+
+    return {
+      post: data?.post ?? {},
+      error: null,
+    }
+  } catch (error) {
+    return {
+      post: null,
+      error,
+    }
+  }
+}
+
 export const generateMockPost = (): Post => {
-  const id = Math.round(Math.random()*100).toString();
+  const id = Math.round(Math.random() * 100).toString();
   const user = { id: '1', username: 'test', email: 'test@example.com', avatarUrl: '' };
   const pickupLocation: PickupLocation = { latitude: 33, longitude: -118 };
   const medias: Array<PostMedia> = [{ id: '1', url: DEFAULT_POST_IMAGE_LINK, type: MediaType.IMAGE }];
@@ -66,7 +109,7 @@ export const generateMockPost = (): Post => {
     user,
     title: `MockPost #${id}`,
     description: `This is mock post for id #${id}`,
-    price: Math.round(Math.random()*100),
+    price: Math.round(Math.random() * 100),
     rate: Rate.DAY,
     pickupLocation,
     medias,
