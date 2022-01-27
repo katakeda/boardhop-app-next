@@ -78,3 +78,14 @@ export interface PostsParams extends PaginateParams {
   skillLevels?: Set<string>;
   brands?: Set<string>;
 }
+
+export interface Category {
+  id: string;
+  label: string;
+  value: string;
+  children: Array<Category> | null;
+}
+
+export type ResponseData = {
+  error?: string | null;
+}

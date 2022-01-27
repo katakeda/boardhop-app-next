@@ -1,15 +1,25 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { MediaType, Post, PostMedia, User } from '../../../types/common';
+import { MediaType, Post, PostMedia, ResponseData, User } from '../../../types/common';
 
-type Data = {
+type GetData = {
   posts: Array<Post>;
-  error?: string | null;
+} & ResponseData;
+
+type PostData = {
+  post: Post | null;
+} & ResponseData;
+
+const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) => {
+  switch (req.method) {
+    case 'POST':
+      return handlePost(req, res);
+    case 'GET':
+    default:
+      return handleGet(req, res);
+  }
 }
 
-const handler = async (
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) => {
+const handleGet = async (req: NextApiRequest, res: NextApiResponse<GetData>) => {
   let queryArr: Array<string> = [];
   if (req.query.tags) {
     queryArr.push(`tags=${req.query.tags}`);
@@ -26,32 +36,54 @@ const handler = async (
 
   const results = await response.json();
 
-  const posts = results.map((result: any): Post => {
-    const user: User = {
-      id: result.userId,
-      username: result.username,
-      avatarUrl: result.avatarUrl,
-    }
-    const media: PostMedia = {
-      id: '',
-      url: '',
-      type: MediaType.IMAGE,
-    }
+  const posts = results.map(convertResponseDataToPost);
 
-    return {
-      id: result.id,
-      title: result.title,
-      description: result.description,
-      price: result.price,
-      rate: result.rate,
-      pickupLocation: { latitude: result.pickupLatitude, longitude: result.pickupLongitude },
-      medias: [media],
-      createdAt: result.createdAt,
-      user,
-    }
-  })
+  return res.status(200).json({ posts });
+}
 
-  res.status(200).json({ posts })
+const handlePost = async (req: NextApiRequest, res: NextApiResponse<PostData>) => {
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(req.body),
+  }
+
+  const response = await fetch(`${process.env.BACKEND_API_ENDPOINT}/posts`, options);
+
+  if (response.status >= 400) {
+    return res.status(response.status).json({ post: null, error: response.statusText });
+  }
+
+  const responseData = await response.json();
+
+  return res.status(200).json({ post: convertResponseDataToPost(responseData) });
+}
+
+const convertResponseDataToPost = (data: any): Post => {
+  const user: User = {
+    id: data.userId,
+    username: data.username,
+    avatarUrl: data.avatarUrl,
+  }
+  const media: PostMedia = {
+    id: '',
+    url: '',
+    type: MediaType.IMAGE,
+  }
+
+  return {
+    id: data.id,
+    title: data.title,
+    description: data.description,
+    price: data.price,
+    rate: data.rate,
+    pickupLocation: { latitude: data.pickupLatitude, longitude: data.pickupLongitude },
+    medias: [media],
+    createdAt: data.createdAt,
+    user,
+  }
 }
 
 export default handler;

@@ -5,10 +5,7 @@ type Data = {
   post: Post;
 }
 
-const handler = async (
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const options = { method: 'GET' };
   const response = await fetch(`${process.env.BACKEND_API_ENDPOINT}/posts/${req.query.id}`, options);
   const results = await response.json();
