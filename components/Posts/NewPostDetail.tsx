@@ -11,6 +11,31 @@ const USER_ID = 1;
 
 const MAX_IMAGES_LENGTH = 5;
 
+interface NewPostDetailProps {
+  rootCategory: string;
+}
+
+interface FormValues {
+  title?: string;
+  description?: string;
+  price?: number;
+  rate?: Rate;
+}
+
+interface FormErrors {
+  title?: string;
+  description?: string;
+  price?: string;
+  rate?: string;
+}
+
+const initialValues: FormValues = {
+  title: '',
+  description: '',
+  price: 0,
+  rate: Rate.DAY,
+}
+
 const NewPostDetailError = () => (
   <div className="flex flex-col h-full w-full justify-center items-center">
     <span>Oops! Something went wrong...</span>
@@ -22,10 +47,6 @@ const NewPostDetailLoading = () => (
     <span className="text-white">Loading...</span>
   </div>
 )
-
-interface NewPostDetailProps {
-  rootCategory: string;
-}
 
 export const NewPostDetail: React.FC<NewPostDetailProps> = ({ rootCategory }) => {
   const [images, setImages] = useState<Array<File>>([]);
@@ -41,34 +62,6 @@ export const NewPostDetail: React.FC<NewPostDetailProps> = ({ rootCategory }) =>
     }
   }
 
-  let NewPostDetailInner: React.FC;
-
-  switch (rootCategory) {
-    case 'surfboard':
-      NewPostDetailInner = NewPostDetailSurfboard;
-      break;
-    case 'snowboard':
-      NewPostDetailInner = NewPostDetailSnowboard;
-      break;
-    default:
-      NewPostDetailInner = NewPostDetailError;
-      break;
-  }
-
-  interface FormValues {
-    title?: string;
-    description?: string;
-    price?: number;
-    rate?: Rate;
-  }
-
-  interface FormErrors {
-    title?: string;
-    description?: string;
-    price?: string;
-    rate?: string;
-  }
-
   const validator = (values: FormValues) => {
     const errors: FormErrors = {};
     if (!values.title) {
@@ -77,7 +70,7 @@ export const NewPostDetail: React.FC<NewPostDetailProps> = ({ rootCategory }) =>
     if (!values.description) {
       errors.description = '必須'
     }
-    if (!values.price) {
+    if ((!values.price && values.price !== 0) || values.price < 0) {
       errors.price = '正しい金額をご入力ください';
     }
     if (!values.rate) {
@@ -114,6 +107,20 @@ export const NewPostDetail: React.FC<NewPostDetailProps> = ({ rootCategory }) =>
     }
   }
 
+  let NewPostDetailInner: React.FC;
+
+  switch (rootCategory) {
+    case 'surfboard':
+      NewPostDetailInner = NewPostDetailSurfboard;
+      break;
+    case 'snowboard':
+      NewPostDetailInner = NewPostDetailSnowboard;
+      break;
+    default:
+      NewPostDetailInner = NewPostDetailError;
+      break;
+  }
+
   if (formError) {
     return <NewPostDetailError />
   }
@@ -125,7 +132,7 @@ export const NewPostDetail: React.FC<NewPostDetailProps> = ({ rootCategory }) =>
   return (
     <div className="flex flex-col space-y-6 py-2 px-4 w-full">
       <Formik
-        initialValues={{}}
+        initialValues={initialValues}
         validate={validator}
         onSubmit={handleSubmit}
       >
@@ -146,7 +153,6 @@ export const NewPostDetail: React.FC<NewPostDetailProps> = ({ rootCategory }) =>
               <Field type="number" name="price" className="rounded-md shadow-md p-2" />
               <span className="p-2">円 /</span>
               <Field as="select" name="rate" className="p-2">
-                <option defaultChecked></option>
                 <option value={Rate.DAY}>{RateMap.day}</option>
                 <option value={Rate.HOUR}>{RateMap.hour}</option>
               </Field>
