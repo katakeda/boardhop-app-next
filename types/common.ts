@@ -63,8 +63,9 @@ export interface Request<T> {
 
 export interface User {
   id: string;
-  username: string;
-  email?: string;
+  email: string;
+  firstName: string;
+  lastName: string;
   avatarUrl: string;
 }
 
@@ -88,4 +89,9 @@ export interface Category {
 
 export type ResponseData = {
   error?: string | null;
+}
+
+export interface EmailPasswordCredentials {
+  email: string;
+  password: string;
 }

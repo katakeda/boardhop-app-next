@@ -64,7 +64,9 @@ const handlePost = async (req: NextApiRequest, res: NextApiResponse<PostData>) =
 const convertResponseDataToPost = (data: any): Post => {
   const user: User = {
     id: data.userId,
-    username: data.username,
+    email: data.email,
+    firstName: data.firstName,
+    lastName: data.lastName,
     avatarUrl: data.avatarUrl,
   }
   const media: PostMedia = {

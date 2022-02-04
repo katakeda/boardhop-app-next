@@ -2,7 +2,7 @@ import { UserIcon } from '@heroicons/react/outline';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef } from 'react';
-import { MediaType } from '../../types/common';
+import { MediaType, PostMedia } from '../../types/common';
 import { DEFAULT_POST_IMAGE_LINK, RateMap } from '../../utils/constants';
 import mapboxgl from '../../utils/mapbox';
 import { useGetPost } from '../../utils/posts';
@@ -34,7 +34,7 @@ export const PostDetail: React.FC<PostDetailProps> = () => {
   if (isLoading) return <div>Loading...</div>
   if (isError) return <div>Error</div>
 
-  const [topImage, ...images] = post.medias.filter((media) => media.type === MediaType.IMAGE);
+  const [topImage, ...images] = post.medias.filter((media: PostMedia) => media.type === MediaType.IMAGE);
   const topImageUrl = topImage && topImage.url ? topImage.url : DEFAULT_POST_IMAGE_LINK;
 
   return (
@@ -44,7 +44,7 @@ export const PostDetail: React.FC<PostDetailProps> = () => {
       </div>
       {images.length > 0 && (
         <div className="flex w-full h-20">
-          {images.map((image) => (
+          {images.map((image: PostMedia) => (
             <div className="relative h-full w-20" key={image.id}>
               <Image src={image.url} alt={image.id} layout="fill" objectFit="cover" />
             </div>
@@ -63,7 +63,7 @@ export const PostDetail: React.FC<PostDetailProps> = () => {
             : <UserIcon className="p-2 w-full h-full" />
           }
         </span>
-        <span className="text-sm text-gray-500 font-semibold">{post.user.username}</span>
+        <span className="text-sm text-gray-500 font-semibold">{post.user.firstName}</span>
       </div>
       <div className="w-full"><button className="w-full px-3 py-2 rounded-md border-2 border-green-600" onClick={() => {}}>レンタルする</button></div>
       <div ref={mapRef} className="w-full h-64"></div>

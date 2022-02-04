@@ -2,7 +2,30 @@ import useSWR from "swr";
 import { MediaType, PickupLocation, Post, PostMedia, PostsParams, Rate } from "../types/common";
 import { DEFAULT_POST_IMAGE_LINK, POSTS_API_ENDPOINT } from "./constants";
 
-export const useGetPosts = (postsParams: PostsParams) => {
+type PostsResponse = {
+  isLoading: boolean;
+  isError: boolean;
+}
+
+type GetPostsResponse = {
+  posts: Array<Post>;
+} & PostsResponse;
+
+type GetPostResponse = {
+  post: Post;
+} & PostsResponse;
+
+interface NewPostPayload {
+  userId: string;
+  title: string;
+  description: string;
+  price: number;
+  rate: Rate;
+  pickupLocation?: PickupLocation;
+  imageData?: FormData;
+}
+
+export const useGetPosts = (postsParams: PostsParams): GetPostsResponse => {
   let queryArr: Array<string> = [];
   if (Number(postsParams.page) > 0) {
     queryArr.push(`p=${postsParams.page}`);
@@ -38,7 +61,7 @@ export const useGetPosts = (postsParams: PostsParams) => {
   }
 }
 
-export const useGetPost = (id: string | Array<string> | undefined) => {
+export const useGetPost = (id: string | Array<string> | undefined): GetPostResponse => {
   if (typeof id !== 'string') {
     id = '';
   }
@@ -55,23 +78,13 @@ export const useGetPost = (id: string | Array<string> | undefined) => {
   }
 }
 
-interface NewPostData {
-  userId: number;
-  title: string;
-  description: string;
-  price: number;
-  rate: Rate;
-  pickupLocation?: PickupLocation;
-  imageData?: FormData;
-}
-
-export const submitPost = async (data: NewPostData) => {
+export const submitPost = async (payload: NewPostPayload) => {
   const options = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(payload),
   };
 
   try {
@@ -100,7 +113,7 @@ export const submitPost = async (data: NewPostData) => {
 
 export const generateMockPost = (): Post => {
   const id = Math.round(Math.random() * 100).toString();
-  const user = { id: '1', username: 'test', email: 'test@example.com', avatarUrl: '' };
+  const user = { id: '1', email: 'test@example.com', firstName: 'First', lastName: 'Last', avatarUrl: '' };
   const pickupLocation: PickupLocation = { latitude: 33, longitude: -118 };
   const medias: Array<PostMedia> = [{ id: '1', url: DEFAULT_POST_IMAGE_LINK, type: MediaType.IMAGE }];
 

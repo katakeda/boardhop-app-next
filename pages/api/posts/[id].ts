@@ -8,12 +8,14 @@ type Data = {
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const options = { method: 'GET' };
   const response = await fetch(`${process.env.BACKEND_API_ENDPOINT}/posts/${req.query.id}`, options);
-  const results = await response.json();
+  const data = await response.json();
 
   const user: User = {
-    id: results.userId,
-    username: results.username,
-    avatarUrl: results.avatarUrl,
+    id: data.userId,
+    email: data.email,
+    firstName: data.firstName,
+    lastName: data.lastName,
+    avatarUrl: data.avatarUrl,
   }
   const media: PostMedia = {
     id: '',
@@ -22,14 +24,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   }
 
   const post: Post = {
-    id: results.id,
-    title: results.title,
-    description: results.description,
-    price: results.price,
-    rate: results.rate,
-    pickupLocation: { latitude: results.pickupLatitude, longitude: results.pickupLongitude },
+    id: data.id,
+    title: data.title,
+    description: data.description,
+    price: data.price,
+    rate: data.rate,
+    pickupLocation: { latitude: data.pickupLatitude, longitude: data.pickupLongitude },
     medias: [media],
-    createdAt: results.createdAt,
+    createdAt: data.createdAt,
     user,
   }
 

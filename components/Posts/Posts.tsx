@@ -146,7 +146,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ post }) => {
               : <UserIcon className="p-2 w-full h-full" />
             }
           </span>
-          <span className="text-sm text-gray-500 font-semibold">{post.user.username}</span>
+          <span className="text-sm text-gray-500 font-semibold">{post.user.firstName}</span>
         </span>
         <span className="p-2">
           <p className="text-gray-500 text-lg font-bold font-mono">{post.price}円/{RateMap[post.rate]}</p>
