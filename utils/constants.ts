@@ -5,6 +5,7 @@ export const API_ENDPOINT_HOST = process.env.NEXT_PUBLIC_API_ENDPOINT_HOST;
 export const API_ENDPOINT_PORT = process.env.NEXT_PUBLIC_API_ENDPOINT_PORT;
 export const API_ENDPOINT = API_ENDPOINT_SCHEME + '://' + API_ENDPOINT_HOST + ':' + API_ENDPOINT_PORT + '/api';
 export const POSTS_API_ENDPOINT = API_ENDPOINT + '/posts';
+export const USER_API_ENDPOINT = API_ENDPOINT + '/user';
 export const USER_SIGNUP_API_ENDPOINT = API_ENDPOINT + '/user/signup';
 export const USER_LOGIN_API_ENDPOINT = API_ENDPOINT + '/user/login';
 export const CDN_URL = 'http://localhost:3000';

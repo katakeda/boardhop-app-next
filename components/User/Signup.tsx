@@ -1,5 +1,6 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { signup } from '../../utils/user';
 import { Wrapper } from './Wrapper';
@@ -28,6 +29,7 @@ const initialValues: FormValues = {
 }
 
 export const Signup: React.FC<SignupProps> = () => {
+  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [formError, setFormError] = useState<Error | any | unknown>(null);
 
@@ -63,8 +65,10 @@ export const Signup: React.FC<SignupProps> = () => {
       };
 
       const { user, error } = await signup(payload);
-      if (error) {
-        setFormError(error);
+      if (error || !user) {
+        setFormError(error ?? new Error('Something went wrong'));
+      } else {
+        router.push('/user/settings');
       }
     } catch (error) {
       setFormError(error);
@@ -75,6 +79,12 @@ export const Signup: React.FC<SignupProps> = () => {
 
   return (
     <Wrapper>
+      {formError && (
+        <section className="p-2 mb-4 text-center border-2 border-red-500 text-red-500">
+          <p>エラーが発生しました</p>
+          <p>もう一度お試しください</p>
+        </section>
+      )}
       <section>
         <p className="text-center text-2xl text-gray-700 font-semibold">新規登録</p>
       </section>

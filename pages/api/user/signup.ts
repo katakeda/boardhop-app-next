@@ -2,6 +2,7 @@ import { FirebaseError } from 'firebase/app';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ResponseData, User } from '../../../types/common';
 import { getAuthErrorMessage, signup } from '../../../utils/firebase';
+import { serialize, CookieSerializeOptions } from 'cookie';
 
 type Data = {
   user: User | null;
@@ -24,8 +25,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
   const { user } = userCredential;
 
-  // TODO: Store this in cookie
+  // TODO: Set proper cookie options (exp, path, etc.)
+  // Not good practice to store JWT token in cookie
   const idToken = await user.getIdToken();
+  const cookieOptions: CookieSerializeOptions = {}
+  res.setHeader("Set-Cookie", serialize("boardhopauth", idToken, cookieOptions))
 
   const options = {
     method: 'POST',
@@ -48,7 +52,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
 const convertResponseDataToUser = (data: any): User => {
   return {
-    id: data.userId,
+    id: data.id,
     email: data.email,
     firstName: data.firstName,
     lastName: data.lastName,

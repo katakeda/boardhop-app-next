@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^1.0.5",
+    "cookie": "^0.4.2",
     "firebase": "^9.6.5",
     "formik": "^2.2.9",
     "mapbox-gl": "^2.6.1",
@@ -21,6 +22,7 @@
     "swr": "^1.0.1"
   },
   "devDependencies": {
+    "@types/cookie": "^0.4.1",
     "@types/mapbox-gl": "^2.6.0",
     "@types/node": "16.11.6",
     "@types/react": "17.0.33",

@@ -1,4 +1,16 @@
-import { USER_SIGNUP_API_ENDPOINT } from "./constants";
+import useSWR from "swr";
+import { User } from "../types/common";
+import { USER_API_ENDPOINT, USER_SIGNUP_API_ENDPOINT } from "./constants";
+
+// TODO: This may be shared type
+type UserResponse = {
+  isLoading: boolean;
+  isError: boolean;
+}
+
+type GetUserResponse = {
+  user: User;
+} & UserResponse;
 
 interface SignupPayload {
   firstName: string;
@@ -37,5 +49,33 @@ export const signup = async (payload: SignupPayload) => {
       user: null,
       error,
     }
+  }
+}
+
+export const useGetUser = (): GetUserResponse => {
+  const options = {
+    method: 'GET',
+    headers: { credentials: 'include' },
+  };
+
+  const fetcher = async (url: string) => {
+    const response = await fetch(url, options);
+
+    if (response.status >= 300) {
+      if (response.status === 401) {
+        throw new Error('Unauthorized');
+      }
+      throw new Error('Failed to get user');
+    }
+
+    return await response.json();
+  };
+
+  const { data, error } = useSWR(USER_API_ENDPOINT, fetcher);
+
+  return {
+    user: data?.user ?? {},
+    isLoading: !data && !error,
+    isError: !!error,
   }
 }
