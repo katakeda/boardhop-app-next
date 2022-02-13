@@ -1,6 +1,8 @@
+import { NextApiRequest } from "next";
+import { NextRequest } from "next/server";
 import useSWR from "swr";
 import { User } from "../types/common";
-import { USER_API_ENDPOINT, USER_SIGNUP_API_ENDPOINT } from "./constants";
+import { USER_API_ENDPOINT, USER_LOGIN_API_ENDPOINT, USER_SIGNUP_API_ENDPOINT } from "./constants";
 
 // TODO: This may be shared type
 type UserResponse = {
@@ -19,6 +21,23 @@ interface SignupPayload {
   password: string;
 }
 
+interface LoginPayload {
+  email: string;
+  password: string;
+}
+
+export const getUserResponse = async (req: NextRequest | NextApiRequest) => {
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${req.cookies.boardhopauth}`
+    },
+  }
+
+  return await fetch(`${process.env.BACKEND_API_ENDPOINT}/user`, options);
+}
+
 export const signup = async (payload: SignupPayload) => {
   const options = {
     method: 'POST',
@@ -30,6 +49,39 @@ export const signup = async (payload: SignupPayload) => {
 
   try {
     const response = await fetch(USER_SIGNUP_API_ENDPOINT, options);
+
+    if (response.status >= 300) {
+      return {
+        user: null,
+        error: response.statusText,
+      }
+    }
+
+    const data = await response.json();
+
+    return {
+      user: data?.user ?? {},
+      error: null,
+    }
+  } catch (error) {
+    return {
+      user: null,
+      error,
+    }
+  }
+}
+
+export const login = async (payload: LoginPayload) => {
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  };
+
+  try {
+    const response = await fetch(USER_LOGIN_API_ENDPOINT, options);
 
     if (response.status >= 300) {
       return {

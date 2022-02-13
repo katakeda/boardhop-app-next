@@ -1,16 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
+import { getUserResponse } from '../../../utils/user';
 
-export function middleware(req: NextRequest) {
-  // TODO: If user is logged in redirect them to home
-  const loggedIn = false;
+export async function middleware(req: NextRequest) {
+  const response = await getUserResponse(req);
 
-  if (loggedIn) {
-    return new Response('Authenticated', {
-      status: 302,
-      headers: {
-        'location': '/',
-      }
-    })
+  if (response.ok) {
+    const data = await response.json();
+    if (data && data.id) {
+      return NextResponse.redirect('/user/settings');
+    }
   }
 
   return NextResponse.next();
