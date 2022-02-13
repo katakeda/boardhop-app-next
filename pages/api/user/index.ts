@@ -1,20 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ResponseData, User } from '../../../types/common';
+import { getUserResponse } from '../../../utils/user';
 
 type Data = {
   user: User | null;
 } & ResponseData;
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  const options = {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${req.cookies.boardhopauth}`
-    },
-  }
-
-  const response = await fetch(`${process.env.BACKEND_API_ENDPOINT}/user`, options);
+  const response = await getUserResponse(req);
 
   if (response.status >= 400) {
     return res.status(response.status).json({ user: null, error: response.statusText });
