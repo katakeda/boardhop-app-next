@@ -43,10 +43,10 @@ export const Signup: React.FC<SignupProps> = () => {
       errors.lastName = '必須'
     }
     if (!values.email) {
-      errors.lastName = '必須'
+      errors.email = '必須'
     }
     if (!values.password) {
-      errors.lastName = '必須'
+      errors.password = '必須'
     }
 
     return errors;
