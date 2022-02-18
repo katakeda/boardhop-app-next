@@ -1,15 +1,18 @@
 import React from 'react';
-import { useRouter } from 'next/router';
-import { useGetUser } from '../../utils/user';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 interface DashboardProps {}
 
 export const Dashboard: React.FC<DashboardProps> = () => {
-  const { user, isLoading, isError } = useGetUser();
-  const router = useRouter();
+  // Make sure we don't get value.state and destructure { user }
+  // since this will cause the component to listen for all state changes
+  const user = useAuthContext((value) => value.state.user);
 
-  if (isLoading) return <div>Loading...</div>
-  if (isError) router.push('/user/login');
+  if (!user) {
+    return (
+      <div>Loading</div>
+    )
+  }
 
   return (
     <div>

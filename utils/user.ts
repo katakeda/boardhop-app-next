@@ -2,7 +2,7 @@ import { NextApiRequest } from "next";
 import { NextRequest } from "next/server";
 import useSWR from "swr";
 import { User } from "../types/common";
-import { USER_API_ENDPOINT, USER_LOGIN_API_ENDPOINT, USER_SIGNUP_API_ENDPOINT } from "./constants";
+import { USER_API_ENDPOINT, USER_LOGIN_API_ENDPOINT, USER_LOGOUT_API_ENDPOINT, USER_SIGNUP_API_ENDPOINT } from "./constants";
 
 // TODO: This may be shared type
 type UserResponse = {
@@ -104,26 +104,40 @@ export const login = async (payload: LoginPayload) => {
   }
 }
 
-export const useGetUser = (): GetUserResponse => {
+export const logout = async (): Promise<boolean> => {
   const options = {
-    method: 'GET',
+    method: 'POST',
     headers: { credentials: 'include' },
   };
 
-  const fetcher = async (url: string) => {
-    const response = await fetch(url, options);
+  try {
+    const response = await fetch(USER_LOGOUT_API_ENDPOINT, options);
 
     if (response.status >= 300) {
-      if (response.status === 401) {
-        throw new Error('Unauthorized');
-      }
-      throw new Error('Failed to get user');
+      return false;
     }
 
-    return await response.json();
-  };
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
 
-  const { data, error } = useSWR(USER_API_ENDPOINT, fetcher);
+export const getUser = async () => {
+  try {
+    const data = await userFetcher(USER_API_ENDPOINT);
+
+    return {
+      user: data?.user ?? {},
+      error: null,
+    }
+  } catch (error) {
+    return { user: null, error };
+  }
+}
+
+export const useGetUser = (): GetUserResponse => {
+  const { data, error } = useSWR(USER_API_ENDPOINT, userFetcher);
 
   return {
     user: data?.user ?? {},
@@ -131,3 +145,21 @@ export const useGetUser = (): GetUserResponse => {
     isError: !!error,
   }
 }
+
+const userFetcher = async (url: string) => {
+  const options = {
+    method: 'GET',
+    headers: { credentials: 'include' },
+  }
+
+  const response = await fetch(url, options);
+
+  if (response.status >= 300) {
+    if (response.status === 401) {
+      throw new Error('Unauthorized');
+    }
+    throw new Error('Failed to get user');
+  }
+
+  return await response.json();
+};

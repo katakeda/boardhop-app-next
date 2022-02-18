@@ -32,7 +32,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     expires: new Date((new Date()).getTime() + 24*60*60*1000),
     httpOnly: true,
   }
-  res.setHeader("Set-Cookie", serialize("boardhopauth", idToken, cookieOptions))
+  res.setHeader("Set-Cookie", serialize("boardhopauth", idToken, cookieOptions));
 
   const options = {
     method: 'POST',

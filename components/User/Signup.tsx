@@ -2,6 +2,7 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { Action, useAuthContext } from '../../contexts/AuthContext';
 import { signup } from '../../utils/user';
 import { Wrapper } from './Wrapper';
 
@@ -30,6 +31,7 @@ const initialValues: FormValues = {
 
 export const Signup: React.FC<SignupProps> = () => {
   const router = useRouter();
+  const dispatch = useAuthContext((value) => value.dispatch);
   const [loading, setLoading] = useState<boolean>(false);
   const [formError, setFormError] = useState<Error | any | unknown>(null);
 
@@ -68,6 +70,7 @@ export const Signup: React.FC<SignupProps> = () => {
       if (error || !user) {
         setFormError(error ?? new Error('Something went wrong'));
       } else {
+        dispatch({ type: Action.SET_USER, payload: user });
         router.push('/user/settings');
       }
     } catch (error) {

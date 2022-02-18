@@ -25,11 +25,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
   const { user } = userCredential;
 
-  // TODO: Set proper cookie options (exp, path, etc.)
-  // Not good practice to store JWT token in cookie
+  // FIXME: Not good practice to store JWT token in cookie
   const idToken = await user.getIdToken();
-  const cookieOptions: CookieSerializeOptions = {}
-  res.setHeader("Set-Cookie", serialize("boardhopauth", idToken, cookieOptions))
+  const cookieOptions: CookieSerializeOptions = {
+    path: '/',
+    expires: new Date((new Date()).getTime() + 24*60*60*1000),
+    httpOnly: true,
+  }
+  res.setHeader("Set-Cookie", serialize("boardhopauth", idToken, cookieOptions));
 
   const options = {
     method: 'POST',
