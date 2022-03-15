@@ -4,7 +4,6 @@ import { AuthProvider } from '../../../contexts/AuthContext';
 import { User } from '../../../types/common';
 import * as UserUtil from '../../../utils/user';
 import { Dashboard } from '../../User/Dashboard';
-import { act } from 'react-dom/test-utils';
 
 const MOCK_USER: User = {
   id: 'test-id',
