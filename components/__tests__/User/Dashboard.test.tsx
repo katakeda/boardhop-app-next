@@ -4,6 +4,7 @@ import { AuthProvider } from '../../../contexts/AuthContext';
 import { User } from '../../../types/common';
 import * as UserUtil from '../../../utils/user';
 import { Dashboard } from '../../User/Dashboard';
+import { act } from 'react-dom/test-utils';
 
 const MOCK_USER: User = {
   id: 'test-id',
@@ -22,19 +23,21 @@ describe('User.Dashboard component', () => {
 
   it('should be loading when user is empty', async () => {
     jest.spyOn(UserUtil, 'getUser').mockResolvedValue({ user: MOCK_USER, error: null });
+
     renderWithAuthContext(<Dashboard />);
 
-    expect(screen.getByText('Loading')).toBeInTheDocument();
+    expect(await screen.findByText('Loading')).toBeInTheDocument();
   })
 
   it('should render a user email', async () => {
     jest.spyOn(UserUtil, 'getUser').mockResolvedValue({ user: MOCK_USER, error: null });
+
     renderWithAuthContext(<Dashboard />);
 
     await waitFor(() => {
       expect(UserUtil.getUser).toBeCalledTimes(1);
     });
 
-    expect(screen.getByText('User: test@test.com')).toBeInTheDocument();
+    expect(await screen.findByText('User: test@test.com')).toBeInTheDocument();
   })
 })
