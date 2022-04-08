@@ -2,19 +2,6 @@ import useSWR from "swr";
 import { MediaType, PickupLocation, Post, PostMedia, PostsParams, Rate } from "../types/common";
 import { DEFAULT_POST_IMAGE_LINK, POSTS_API_ENDPOINT } from "./constants";
 
-type PostsResponse = {
-  isLoading: boolean;
-  isError: boolean;
-}
-
-type GetPostsResponse = {
-  posts: Array<Post>;
-} & PostsResponse;
-
-type GetPostResponse = {
-  post: Post;
-} & PostsResponse;
-
 interface NewPostPayload {
   userId: string;
   title: string;
@@ -25,7 +12,7 @@ interface NewPostPayload {
   imageData?: FormData;
 }
 
-export const useGetPosts = (postsParams: PostsParams): GetPostsResponse => {
+export const getPosts = async (postsParams: PostsParams) => {
   let queryArr: Array<string> = [];
   if (Number(postsParams.page) > 0) {
     queryArr.push(`p=${postsParams.page}`);
@@ -49,19 +36,31 @@ export const useGetPosts = (postsParams: PostsParams): GetPostsResponse => {
     queryArr.push(`tags=${tags.join(',')}`);
   }
 
-  const options = { method: 'GET' };
-  const url = `${POSTS_API_ENDPOINT}?${queryArr.join('&')}`;
-  const fetcher = () => fetch(url, options).then(res => res.json());
-  const { data, error } = useSWR(url, fetcher);
+  try {
+    const response = await fetch(`${POSTS_API_ENDPOINT}?${queryArr.join('&')}`, { method: 'GET' });
 
-  return {
-    posts: data?.posts ?? [],
-    isLoading: !data && !error,
-    isError: !!error,
+    if (response.status >= 300) {
+      return {
+        posts: [],
+        error: response.statusText,
+      }
+    }
+
+    const data = await response.json();
+
+    return {
+      posts: data?.posts ?? [],
+      error: null,
+    }
+  } catch (error) {
+    return {
+      posts: [],
+      error: 'Failed to get posts',
+    }
   }
 }
 
-export const useGetPost = (id: string | Array<string> | undefined): GetPostResponse => {
+export const useGetPost = (id: string | Array<string> | undefined) => {
   if (typeof id !== 'string') {
     id = '';
   }
