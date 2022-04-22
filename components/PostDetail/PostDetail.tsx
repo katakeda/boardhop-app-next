@@ -1,7 +1,7 @@
+import React, { useEffect, useRef } from 'react';
 import { UserIcon } from '@heroicons/react/outline';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useEffect, useRef } from 'react';
 import { MediaType, PostMedia } from '../../types/common';
 import { DEFAULT_POST_IMAGE_LINK, RateMap } from '../../utils/constants';
 import mapboxgl from '../../utils/mapbox';

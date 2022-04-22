@@ -1,9 +1,9 @@
 import React, { BaseSyntheticEvent, useState } from 'react';
-import { NewPostDetail } from './NewPostDetail';
+import { PostNewDetail } from './PostNewDetail';
 
-interface NewPostProps { }
+interface PostNewProps { }
 
-export const NewPost: React.FC<NewPostProps> = () => {
+export const PostNew: React.FC<PostNewProps> = () => {
   const [rootCategory, setRootCategory] = useState<string | null>(null);
 
   const handleRootCategoryChange = (event: BaseSyntheticEvent) => {
@@ -23,7 +23,7 @@ export const NewPost: React.FC<NewPostProps> = () => {
         </div>
       )}
       {rootCategory !== null && (
-        <NewPostDetail rootCategory={rootCategory} />
+        <PostNewDetail rootCategory={rootCategory} />
       )}
     </div>
   );

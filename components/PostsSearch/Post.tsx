@@ -1,6 +1,6 @@
-import Image from 'next/image';
 import React from 'react';
 import UserIcon from '@heroicons/react/outline/UserIcon';
+import Image from 'next/image';
 import { MediaType, Post as PostType } from '../../types/common';
 import { DEFAULT_POST_IMAGE_LINK, RateMap } from '../../utils/constants';
 

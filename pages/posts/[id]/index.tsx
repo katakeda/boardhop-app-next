@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
-import { DefaultLayout } from '../../components/Common/DefaultLayout';
-import { PostDetail } from '../../components/Posts/PostDetail';
-import type { NextPageWithLayout } from '../../types/common';
+import { DefaultLayout } from '../../../components/Common/DefaultLayout';
+import { PostDetail } from '../../../components/PostDetail/PostDetail';
+import type { NextPageWithLayout } from '../../../types/common';
 
 const PostDetailPage: NextPageWithLayout = () => {
   return (

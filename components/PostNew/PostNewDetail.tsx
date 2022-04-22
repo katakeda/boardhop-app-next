@@ -1,17 +1,17 @@
-import { ErrorMessage, Field, Form, Formik } from 'formik';
 import React, { BaseSyntheticEvent, useState } from 'react';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { Rate } from '../../types/common';
 import { RateMap } from '../../utils/constants';
 import { submitPost } from '../../utils/posts';
-import { NewPostDetailSnowboard } from './NewPostDetailSnowboard';
-import { NewPostDetailSurfboard } from './NewPostDetailSurfboard';
+import { PostNewDetailSnowboard } from './PostNewDetailSnowboard';
+import { PostNewDetailSurfboard } from './PostNewDetailSurfboard';
 
 // TODO: Fetch this value from auth
 const USER_ID = '03fa2c7e-37e7-4777-98f6-bbfe06e01dd0';
 
 const MAX_IMAGES_LENGTH = 5;
 
-interface NewPostDetailProps {
+interface PostNewDetailProps {
   rootCategory: string;
 }
 
@@ -36,19 +36,19 @@ const initialValues: FormValues = {
   rate: Rate.DAY,
 }
 
-const NewPostDetailError = () => (
+const PostNewDetailError = () => (
   <div className="flex flex-col h-full w-full justify-center items-center">
     <span>Oops! Something went wrong...</span>
   </div>
 );
 
-const NewPostDetailLoading = () => (
+const PostNewDetailLoading = () => (
   <div className="flex flex-col bg-gray-900 h-full w-full justify-center items-center">
     <span className="text-white">Loading...</span>
   </div>
 )
 
-export const NewPostDetail: React.FC<NewPostDetailProps> = ({ rootCategory }) => {
+export const PostNewDetail: React.FC<PostNewDetailProps> = ({ rootCategory }) => {
   const [images, setImages] = useState<Array<File>>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [formError, setFormError] = useState<Error | any | unknown>(null);
@@ -107,26 +107,26 @@ export const NewPostDetail: React.FC<NewPostDetailProps> = ({ rootCategory }) =>
     }
   }
 
-  let NewPostDetailInner: React.FC;
+  let PostNewDetailInner: React.FC;
 
   switch (rootCategory) {
     case 'surfboard':
-      NewPostDetailInner = NewPostDetailSurfboard;
+      PostNewDetailInner = PostNewDetailSurfboard;
       break;
     case 'snowboard':
-      NewPostDetailInner = NewPostDetailSnowboard;
+      PostNewDetailInner = PostNewDetailSnowboard;
       break;
     default:
-      NewPostDetailInner = NewPostDetailError;
+      PostNewDetailInner = PostNewDetailError;
       break;
   }
 
   if (formError) {
-    return <NewPostDetailError />
+    return <PostNewDetailError />
   }
 
   if (loading) {
-    return <NewPostDetailLoading />
+    return <PostNewDetailLoading />
   }
 
   return (
@@ -160,7 +160,7 @@ export const NewPostDetail: React.FC<NewPostDetailProps> = ({ rootCategory }) =>
             <ErrorMessage className="p-1 text-red-500" name="price" component="div" />
             <ErrorMessage className="p-1 text-red-500" name="rate" component="div" />
           </div>
-          <NewPostDetailInner />
+          <PostNewDetailInner />
           <div className="flex flex-col w-full">
             <p>デポジット</p>
             <Field type="text" name="deposit" className="rounded-md shadow-md p-2" />
