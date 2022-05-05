@@ -1,11 +1,19 @@
+const colors = require('tailwindcss/colors');
+
 module.exports = {
-  purge: [],
-  darkMode: false, // or 'media' or 'class'
+  content: [
+    './pages/**/*.{html,js,tsx}',
+    './components/**/*.{html,js,tsx}',
+  ],
   theme: {
-    extend: {},
-  },
-  variants: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: colors.violet,
+      },
+      fontFamily: {
+        sans: ['Lato', 'Open Sans', 'Roboto', 'Helvetica', 'Proxima Nova', 'Futura'],
+      },
+    },
   },
   plugins: [],
 }
