@@ -1,13 +1,20 @@
-import React, { BaseSyntheticEvent, useRef, useState } from 'react';
+import React, { BaseSyntheticEvent, useEffect, useRef, useState } from 'react';
 import { PlusIcon, XCircleIcon } from '@heroicons/react/solid';
+import { Result } from '@mapbox/mapbox-gl-geocoder';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import { Rate } from '../../types/common';
+import Image from 'next/image';
+import { PickupLocation, Rate } from '../../types/common';
 import { RateMap } from '../../utils/constants';
+import mapboxgl, {
+  DEFAULT_CENTER,
+  DEFAULT_STYLE,
+  DEFAULT_ZOOM,
+  MapboxGlGeocoder,
+} from '../../utils/mapbox';
 import { submitPost } from '../../utils/posts';
 import { DropdownMenu } from '../Common/DropdownMenu';
 import { PostNewDetailSnowboard } from './PostNewDetailSnowboard';
 import { PostNewDetailSurfboard } from './PostNewDetailSurfboard';
-import Image from 'next/image';
 
 // TODO: Fetch this value from auth
 const USER_ID = '03fa2c7e-37e7-4777-98f6-bbfe06e01dd0';
@@ -33,7 +40,8 @@ interface FormErrors {
   rate?: string;
 }
 
-interface UploadedImage extends File {
+interface UploadedImage {
+  file: File;
   url: string;
 }
 
@@ -51,7 +59,7 @@ const PostNewDetailError = () => (
 );
 
 const PostNewDetailLoading = () => (
-  <div className="flex flex-col bg-gray-900 h-full w-full justify-center items-center">
+  <div className="flex flex-col h-full w-full justify-center items-center">
     <span className="text-white">Loading...</span>
   </div>
 );
@@ -64,8 +72,44 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [formError, setFormError] = useState<Error | any | unknown>(null);
   const [rateValue, setRateValue] = useState<Rate | string>('');
+  const [pickupLocation, setPickupLocation] = useState<PickupLocation>(
+    {} as PickupLocation
+  );
 
-  const imageRef = useRef<HTMLInputElement | null>(null);
+  const imageRef = useRef<HTMLInputElement>(null);
+  const mapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (mapRef.current !== null) {
+      const map = new mapboxgl.Map({
+        container: mapRef.current,
+        style: DEFAULT_STYLE,
+        center: DEFAULT_CENTER,
+        zoom: DEFAULT_ZOOM,
+      });
+
+      map.addControl(
+        new MapboxGlGeocoder({
+          accessToken: mapboxgl.accessToken,
+          // @ts-ignore types/mapbox__mapbox-gl-geocoder is not up to date
+          mapboxgl: mapboxgl,
+          marker: true,
+          flyTo: { screenSpeed: 5 },
+          placeholder: '検索',
+          // @ts-ignore types/mapbox__mapbox-gl-geocoder is not up to date
+          proximity: 'ip',
+          collapsed: true,
+          countries: 'jp',
+          language: 'ja',
+        }).on('result', ({ result }: { result: Result }) => {
+          setPickupLocation({
+            latitude: result.center[1],
+            longitude: result.center[0],
+          });
+        })
+      );
+    }
+  }, []);
 
   const handleImageUpload = (event: BaseSyntheticEvent) => {
     const currentTarget: HTMLInputElement = event.currentTarget;
@@ -75,7 +119,7 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
       images.length < MAX_IMAGES_LENGTH
     ) {
       const file = currentTarget.files[0];
-      const image = { ...file, url: URL.createObjectURL(file) };
+      const image = { file, url: URL.createObjectURL(file) };
       setImages((prev) => [...prev, image]);
       event.currentTarget.value = null;
     }
@@ -108,7 +152,7 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
     try {
       const imageData = new FormData();
       for (const key in images) {
-        imageData.append(`image_${key}`, images[key], images[key].name);
+        imageData.append(`image_${key}`, images[key].file, images[key].file.name);
       }
       const data = {
         userId: USER_ID,
@@ -116,6 +160,7 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
         description: values.description ?? '',
         price: values.price ?? 0,
         rate: values.rate ?? Rate.DAY,
+        pickupLocation,
         imageData,
       };
       const { post, error } = await submitPost(data);
@@ -226,7 +271,9 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
           </div>
           <PostNewDetailInner />
           <div className="flex flex-col my-4 w-full">
-            <p className="font-sans mb-2 text-sm text-gray-700">デポジット</p>
+            <p className="font-sans mb-2 text-sm text-gray-700">
+              デポジット金額
+            </p>
             <Field
               type="text"
               name="deposit"
@@ -234,12 +281,9 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
             />
           </div>
           <div className="flex flex-col my-4 w-full">
-            <p className="font-sans mb-2 text-sm text-gray-700">受け渡し場所</p>
-            <Field
-              type="text"
-              name="location"
-              className="rounded-md border border-gray-300 shadow-sm py-2 px-3 focus:outline-none"
-            />
+            <p className="font-sans mb-2 text-sm text-gray-700">地域</p>
+            <div ref={mapRef} className="w-full h-64 rounded-md shadow-sm" />
+            <Field type="hidden" name="location" value={rateValue} />
           </div>
           <div className="flex flex-col my-4 w-full">
             <p className="font-sans mb-2 text-sm text-gray-700">

@@ -1,5 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { MediaType, Post, PostMedia, ResponseData, User } from '../../../types/common';
+import {
+  MediaType,
+  Post,
+  PostMedia,
+  ResponseData,
+  User,
+} from '../../../types/common';
 
 type GetData = {
   posts: Array<Post>;
@@ -9,7 +15,10 @@ type PostData = {
   post: Post | null;
 } & ResponseData;
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) => {
+const handler = async (
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>
+) => {
   switch (req.method) {
     case 'POST':
       return handlePost(req, res);
@@ -17,9 +26,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
     default:
       return handleGet(req, res);
   }
-}
+};
 
-const handleGet = async (req: NextApiRequest, res: NextApiResponse<GetData>) => {
+const handleGet = async (
+  req: NextApiRequest,
+  res: NextApiResponse<GetData>
+) => {
   let queryArr: Array<string> = [];
   if (req.query.tags) {
     queryArr.push(`tags=${req.query.tags}`);
@@ -28,10 +40,15 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse<GetData>) => 
     queryArr.push(`cats=${req.query.cats}`);
   }
   const options = { method: 'GET' };
-  const response = await fetch(`${process.env.BACKEND_API_ENDPOINT}/posts?${queryArr.join('&')}`, options);
+  const response = await fetch(
+    `${process.env.BACKEND_API_ENDPOINT}/posts?${queryArr.join('&')}`,
+    options
+  );
 
   if (response.status >= 400) {
-    return res.status(response.status).json({ posts: [], error: response.statusText });
+    return res
+      .status(response.status)
+      .json({ posts: [], error: response.statusText });
   }
 
   const results = await response.json();
@@ -39,27 +56,37 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse<GetData>) => 
   const posts = results.map(convertResponseDataToPost);
 
   return res.status(200).json({ posts });
-}
+};
 
-const handlePost = async (req: NextApiRequest, res: NextApiResponse<PostData>) => {
+const handlePost = async (
+  req: NextApiRequest,
+  res: NextApiResponse<PostData>
+) => {
   const options = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(req.body),
-  }
+  };
 
-  const response = await fetch(`${process.env.BACKEND_API_ENDPOINT}/posts`, options);
+  const response = await fetch(
+    `${process.env.BACKEND_API_ENDPOINT}/posts`,
+    options
+  );
 
   if (response.status >= 400) {
-    return res.status(response.status).json({ post: null, error: response.statusText });
+    return res
+      .status(response.status)
+      .json({ post: null, error: response.statusText });
   }
 
   const responseData = await response.json();
 
-  return res.status(200).json({ post: convertResponseDataToPost(responseData) });
-}
+  return res
+    .status(200)
+    .json({ post: convertResponseDataToPost(responseData) });
+};
 
 const convertResponseDataToPost = (data: any): Post => {
   const user: User = {
@@ -68,12 +95,12 @@ const convertResponseDataToPost = (data: any): Post => {
     firstName: data.firstName,
     lastName: data.lastName,
     avatarUrl: data.avatarUrl,
-  }
+  };
   const media: PostMedia = {
     id: '',
     url: '',
     type: MediaType.IMAGE,
-  }
+  };
 
   return {
     id: data.id,
@@ -81,11 +108,14 @@ const convertResponseDataToPost = (data: any): Post => {
     description: data.description,
     price: data.price,
     rate: data.rate,
-    pickupLocation: { latitude: data.pickupLatitude, longitude: data.pickupLongitude },
+    pickupLocation: {
+      latitude: data.pickupLatitude,
+      longitude: data.pickupLongitude,
+    },
     medias: [media],
     createdAt: data.createdAt,
     user,
-  }
-}
+  };
+};
 
 export default handler;

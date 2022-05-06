@@ -1,6 +1,13 @@
-import useSWR from "swr";
-import { MediaType, PickupLocation, Post, PostMedia, PostsParams, Rate } from "../types/common";
-import { DEFAULT_POST_IMAGE_LINK, POSTS_API_ENDPOINT } from "./constants";
+import useSWR from 'swr';
+import {
+  MediaType,
+  PickupLocation,
+  Post,
+  PostMedia,
+  PostsParams,
+  Rate,
+} from '../types/common';
+import { DEFAULT_POST_IMAGE_LINK, POSTS_API_ENDPOINT } from './constants';
 
 interface NewPostPayload {
   userId: string;
@@ -21,7 +28,7 @@ export const getPosts = async (postsParams: PostsParams) => {
     queryArr.push(`type=${postsParams.type}`);
   }
   if (postsParams.categories && postsParams.categories.size > 0) {
-    queryArr.push(`cats=${Array.from(postsParams.categories).join(',')}`)
+    queryArr.push(`cats=${Array.from(postsParams.categories).join(',')}`);
   }
 
   let tags: Array<string> = [];
@@ -37,13 +44,16 @@ export const getPosts = async (postsParams: PostsParams) => {
   }
 
   try {
-    const response = await fetch(`${POSTS_API_ENDPOINT}?${queryArr.join('&')}`, { method: 'GET' });
+    const response = await fetch(
+      `${POSTS_API_ENDPOINT}?${queryArr.join('&')}`,
+      { method: 'GET' }
+    );
 
     if (response.status >= 300) {
       return {
         posts: [],
         error: response.statusText,
-      }
+      };
     }
 
     const data = await response.json();
@@ -51,14 +61,14 @@ export const getPosts = async (postsParams: PostsParams) => {
     return {
       posts: data?.posts ?? [],
       error: null,
-    }
+    };
   } catch (error) {
     return {
       posts: [],
       error: 'Failed to get posts',
-    }
+    };
   }
-}
+};
 
 export const useGetPost = (id: string | Array<string> | undefined) => {
   if (typeof id !== 'string') {
@@ -67,15 +77,15 @@ export const useGetPost = (id: string | Array<string> | undefined) => {
 
   const options = { method: 'GET' };
   const url = `${POSTS_API_ENDPOINT}/${id}`;
-  const fetcher = () => fetch(url, options).then(res => res.json());
+  const fetcher = () => fetch(url, options).then((res) => res.json());
   const { data, error } = useSWR(url, fetcher);
 
   return {
     post: data?.post ?? {},
     isLoading: !data && !error,
     isError: !!error,
-  }
-}
+  };
+};
 
 export const submitPost = async (payload: NewPostPayload) => {
   const options = {
@@ -93,7 +103,7 @@ export const submitPost = async (payload: NewPostPayload) => {
       return {
         post: null,
         error: response.statusText,
-      }
+      };
     }
 
     const data = await response.json();
@@ -101,20 +111,28 @@ export const submitPost = async (payload: NewPostPayload) => {
     return {
       post: data?.post ?? {},
       error: null,
-    }
+    };
   } catch (error) {
     return {
       post: null,
       error,
-    }
+    };
   }
-}
+};
 
 export const generateMockPost = (): Post => {
   const id = Math.round(Math.random() * 100).toString();
-  const user = { id: '1', email: 'test@example.com', firstName: 'First', lastName: 'Last', avatarUrl: '' };
+  const user = {
+    id: '1',
+    email: 'test@example.com',
+    firstName: 'First',
+    lastName: 'Last',
+    avatarUrl: '',
+  };
   const pickupLocation: PickupLocation = { latitude: 33, longitude: -118 };
-  const medias: Array<PostMedia> = [{ id: '1', url: DEFAULT_POST_IMAGE_LINK, type: MediaType.IMAGE }];
+  const medias: Array<PostMedia> = [
+    { id: '1', url: DEFAULT_POST_IMAGE_LINK, type: MediaType.IMAGE },
+  ];
 
   return {
     id,
@@ -126,5 +144,5 @@ export const generateMockPost = (): Post => {
     pickupLocation,
     medias,
     createdAt: new Date(),
-  }
-}
+  };
+};
