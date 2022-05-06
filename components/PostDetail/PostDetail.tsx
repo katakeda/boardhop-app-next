@@ -4,8 +4,10 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { MediaType, PostMedia } from '../../types/common';
 import { DEFAULT_POST_IMAGE_LINK, RateMap } from '../../utils/constants';
-import mapboxgl from '../../utils/mapbox';
+import mapboxgl, { DEFAULT_STYLE, DEFAULT_ZOOM } from '../../utils/mapbox';
 import { useGetPost } from '../../utils/posts';
+import { DefaultError } from '../Common/DefaultError';
+import { DefaultLoading } from '../Common/DefaultLoading';
 
 interface PostDetailProps {}
 
@@ -19,9 +21,9 @@ export const PostDetail: React.FC<PostDetailProps> = () => {
     if (post && mapRef.current !== null) {
       const map = new mapboxgl.Map({
         container: mapRef.current,
-        style: 'mapbox://styles/mapbox/streets-v11',
         center: [post.pickupLocation.longitude, post.pickupLocation.latitude],
-        zoom: 10,
+        style: DEFAULT_STYLE,
+        zoom: DEFAULT_ZOOM,
       });
 
       new mapboxgl.Marker()
@@ -31,11 +33,15 @@ export const PostDetail: React.FC<PostDetailProps> = () => {
         ])
         .addTo(map);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [post]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error</div>;
+  if (isLoading) {
+    return <DefaultError />;
+  }
+
+  if (isError) {
+    return <DefaultLoading />;
+  }
 
   const [topImage, ...images] = post.medias.filter(
     (media: PostMedia) => media.type === MediaType.IMAGE

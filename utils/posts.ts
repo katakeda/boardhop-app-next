@@ -15,7 +15,8 @@ interface NewPostPayload {
   description: string;
   price: number;
   rate: Rate;
-  pickupLocation?: PickupLocation;
+  pickupLatitude?: number;
+  pickupLongitude?: number;
   imageData?: FormData;
 }
 
@@ -70,7 +71,13 @@ export const getPosts = async (postsParams: PostsParams) => {
   }
 };
 
-export const useGetPost = (id: string | Array<string> | undefined) => {
+export const useGetPost = (
+  id: string | Array<string> | undefined
+): {
+  post: Post;
+  isLoading: boolean;
+  isError: boolean;
+} => {
   if (typeof id !== 'string') {
     id = '';
   }

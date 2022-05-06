@@ -15,6 +15,8 @@ import { submitPost } from '../../utils/posts';
 import { DropdownMenu } from '../Common/DropdownMenu';
 import { PostNewDetailSnowboard } from './PostNewDetailSnowboard';
 import { PostNewDetailSurfboard } from './PostNewDetailSurfboard';
+import { DefaultError } from '../Common/DefaultError';
+import { DefaultLoading } from '../Common/DefaultLoading';
 
 // TODO: Fetch this value from auth
 const USER_ID = '03fa2c7e-37e7-4777-98f6-bbfe06e01dd0';
@@ -51,18 +53,6 @@ const initialValues: FormValues = {
   price: 0,
   rate: Rate.DAY,
 };
-
-const PostNewDetailError = () => (
-  <div className="flex flex-col h-full w-full justify-center items-center">
-    <span>Oops! Something went wrong...</span>
-  </div>
-);
-
-const PostNewDetailLoading = () => (
-  <div className="flex flex-col h-full w-full justify-center items-center">
-    <span className="text-white">Loading...</span>
-  </div>
-);
 
 export const PostNewDetail: React.FC<PostNewDetailProps> = ({
   rootCategory,
@@ -152,7 +142,11 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
     try {
       const imageData = new FormData();
       for (const key in images) {
-        imageData.append(`image_${key}`, images[key].file, images[key].file.name);
+        imageData.append(
+          `image_${key}`,
+          images[key].file,
+          images[key].file.name
+        );
       }
       const data = {
         userId: USER_ID,
@@ -160,7 +154,8 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
         description: values.description ?? '',
         price: values.price ?? 0,
         rate: values.rate ?? Rate.DAY,
-        pickupLocation,
+        pickupLatitude: pickupLocation?.latitude,
+        pickupLongitude: pickupLocation?.longitude,
         imageData,
       };
       const { post, error } = await submitPost(data);
@@ -189,11 +184,11 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
   }
 
   if (formError) {
-    return <PostNewDetailError />;
+    return <DefaultError />;
   }
 
   if (loading) {
-    return <PostNewDetailLoading />;
+    return <DefaultLoading />;
   }
 
   return (
