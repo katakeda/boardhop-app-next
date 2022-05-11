@@ -65,13 +65,16 @@ const handlePost = async (
   const options = {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Accept-Encoding': req.headers['accept-encoding'],
+      'Cache-Control': req.headers['cache-control'],
+      'Content-Type': req.headers['content-type'],
     },
-    body: JSON.stringify(req.body),
+    body: req.body,
   };
 
   const response = await fetch(
     `${process.env.BACKEND_API_ENDPOINT}/posts`,
+    // @ts-ignore
     options
   );
 

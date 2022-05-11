@@ -140,14 +140,6 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
     setLoading(true);
 
     try {
-      const imageData = new FormData();
-      for (const key in images) {
-        imageData.append(
-          `image_${key}`,
-          images[key].file,
-          images[key].file.name
-        );
-      }
       const data = {
         userId: USER_ID,
         title: values.title ?? '',
@@ -156,9 +148,14 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
         rate: values.rate ?? Rate.DAY,
         pickupLatitude: pickupLocation?.latitude,
         pickupLongitude: pickupLocation?.longitude,
-        imageData,
       };
-      const { post, error } = await submitPost(data);
+      const payload = new FormData();
+      payload.append('data', JSON.stringify(data));
+      for (const key in images) {
+        payload.append('images', images[key].file, images[key].file.name);
+      }
+
+      const { post, error } = await submitPost(payload);
       if (error) {
         setFormError(error);
       }

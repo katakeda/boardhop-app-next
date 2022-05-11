@@ -9,17 +9,6 @@ import {
 } from '../types/common';
 import { DEFAULT_POST_IMAGE_LINK, POSTS_API_ENDPOINT } from './constants';
 
-interface NewPostPayload {
-  userId: string;
-  title: string;
-  description: string;
-  price: number;
-  rate: Rate;
-  pickupLatitude?: number;
-  pickupLongitude?: number;
-  imageData?: FormData;
-}
-
 export const getPosts = async (postsParams: PostsParams) => {
   let queryArr: Array<string> = [];
   if (Number(postsParams.page) > 0) {
@@ -94,13 +83,10 @@ export const useGetPost = (
   };
 };
 
-export const submitPost = async (payload: NewPostPayload) => {
+export const submitPost = async (payload: FormData) => {
   const options = {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
+    body: payload,
   };
 
   try {
