@@ -149,11 +149,12 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
         pickupLatitude: pickupLocation?.latitude,
         pickupLongitude: pickupLocation?.longitude,
       };
+
       const payload = new FormData();
       payload.append('data', JSON.stringify(data));
-      for (const key in images) {
-        payload.append('images', images[key].file, images[key].file.name);
-      }
+      images.forEach((image) => {
+        payload.append('images', image.file, image.file.name);
+      })
 
       const { post, error } = await submitPost(payload);
       if (error) {
