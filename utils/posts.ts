@@ -83,7 +83,9 @@ export const useGetPost = (
   };
 };
 
-export const submitPost = async (payload: FormData) => {
+export const submitPost = async (
+  payload: FormData
+): Promise<{ post: Post | null; error: any }> => {
   const options = {
     method: 'POST',
     body: payload,
@@ -102,8 +104,8 @@ export const submitPost = async (payload: FormData) => {
     const data = await response.json();
 
     return {
-      post: data?.post ?? {},
-      error: null,
+      post: data.post,
+      error: data.post ? null : 'Failed to get submit post',
     };
   } catch (error) {
     return {

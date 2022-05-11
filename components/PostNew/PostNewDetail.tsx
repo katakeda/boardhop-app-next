@@ -3,6 +3,7 @@ import { PlusIcon, XCircleIcon } from '@heroicons/react/solid';
 import { Result } from '@mapbox/mapbox-gl-geocoder';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { PickupLocation, Rate } from '../../types/common';
 import { RateMap } from '../../utils/constants';
 import mapboxgl, {
@@ -12,11 +13,11 @@ import mapboxgl, {
   MapboxGlGeocoder,
 } from '../../utils/mapbox';
 import { submitPost } from '../../utils/posts';
+import { DefaultError } from '../Common/DefaultError';
+import { DefaultLoading } from '../Common/DefaultLoading';
 import { DropdownMenu } from '../Common/DropdownMenu';
 import { PostNewDetailSnowboard } from './PostNewDetailSnowboard';
 import { PostNewDetailSurfboard } from './PostNewDetailSurfboard';
-import { DefaultError } from '../Common/DefaultError';
-import { DefaultLoading } from '../Common/DefaultLoading';
 
 // TODO: Fetch this value from auth
 const USER_ID = '03fa2c7e-37e7-4777-98f6-bbfe06e01dd0';
@@ -58,6 +59,7 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
   rootCategory,
   goBack,
 }) => {
+  const router = useRouter();
   const [images, setImages] = useState<Array<UploadedImage>>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [formError, setFormError] = useState<Error | any | unknown>(null);
@@ -154,11 +156,13 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
       payload.append('data', JSON.stringify(data));
       images.forEach((image) => {
         payload.append('images', image.file, image.file.name);
-      })
+      });
 
       const { post, error } = await submitPost(payload);
-      if (error) {
+      if (error || !post) {
         setFormError(error);
+      } else {
+        router.push(`/posts/${post.id}`);
       }
     } catch (error) {
       setFormError(error);
@@ -177,7 +181,7 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
       PostNewDetailInner = PostNewDetailSnowboard;
       break;
     default:
-      PostNewDetailInner = PostNewDetailError;
+      PostNewDetailInner = DefaultError;
       break;
   }
 
