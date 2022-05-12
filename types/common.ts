@@ -86,9 +86,17 @@ export interface TagsParams {
 
 export interface Category {
   id: string;
+  parentId: string;
+  value: string;
+  label: string;
+  path: string;
+}
+
+export interface CategoryTree {
+  id: string;
   label: string;
   value: string;
-  children: Array<Category> | null;
+  children: Array<CategoryTree> | null;
 }
 
 export interface Tag {

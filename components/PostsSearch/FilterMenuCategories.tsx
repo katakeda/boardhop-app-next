@@ -1,9 +1,9 @@
 import React from 'react';
 import { Action, usePostsContext } from '../../contexts/PostsContext';
-import { Category } from '../../types/common';
+import { CategoryTree } from '../../types/common';
 
 // TODO: Replace with actual data
-const MockRootCategory: Category = {
+const MockRootCategory: CategoryTree = {
   id: '1',
   label: '全てのカテゴリー',
   value: 'root',
@@ -24,7 +24,7 @@ const MockRootCategory: Category = {
 }
 
 interface FilterMenuCategoryTreeProps {
-  category: Category;
+  category: CategoryTree;
   depth: number;
 }
 
@@ -43,7 +43,7 @@ const FilterMenuCategoryTree: React.FC<FilterMenuCategoryTreeProps> = ({ categor
     <div>
       {Array(depth).fill('　').map((d, index) => <span key={index}>{d}</span>)}
       <span className="border-b-2" onClick={handleClick}>{category.label}</span>
-      {category.children && category.children.map((child: Category) => (<FilterMenuCategoryTree key={child.id} category={child} depth={depth + 1} />))}
+      {category.children && category.children.map((child: CategoryTree) => (<FilterMenuCategoryTree key={child.id} category={child} depth={depth + 1} />))}
     </div>
   )
 }

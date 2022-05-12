@@ -4,7 +4,8 @@ import { Result } from '@mapbox/mapbox-gl-geocoder';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { PickupLocation, Rate, Tag } from '../../types/common';
+import { Category, PickupLocation, Rate, Tag } from '../../types/common';
+import { getCategories } from '../../utils/categories';
 import { RateMap } from '../../utils/constants';
 import mapboxgl, {
   DEFAULT_CENTER,
@@ -20,7 +21,7 @@ import { PostNewDetailSnowboard } from './PostNewDetailSnowboard';
 import { PostNewDetailSurfboard } from './PostNewDetailSurfboard';
 
 // TODO: Fetch this value from auth
-const USER_ID = '03fa2c7e-37e7-4777-98f6-bbfe06e01dd0';
+const USER_ID = '3914a799-0d58-45d9-bc13-798d809ff234';
 
 const MAX_IMAGES_LENGTH = 8;
 
@@ -69,6 +70,7 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
   const [pickupLocation, setPickupLocation] = useState<PickupLocation>(
     {} as PickupLocation
   );
+  const [postCategory, setPostCategory] = useState<Category>({} as Category);
 
   const imageRef = useRef<HTMLInputElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
@@ -104,6 +106,18 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
       );
     }
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      const { categories, error } = await getCategories();
+      if (!error && categories) {
+        const category = categories.find((category) => {
+          category.value === rootCategory;
+        });
+        setPostCategory(category ? category : categories[0]);
+      }
+    })();
+  }, [rootCategory]);
 
   const handleImageUpload = (event: BaseSyntheticEvent) => {
     const currentTarget: HTMLInputElement = event.currentTarget;
@@ -158,6 +172,7 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
       payload.append('data', JSON.stringify(data));
       payload.append('tag_ids', skillValue?.id);
       payload.append('tag_ids', brandValue?.id);
+      payload.append('category_ids', postCategory?.id);
       images.forEach((image) => {
         payload.append('images', image.file, image.file.name);
       });

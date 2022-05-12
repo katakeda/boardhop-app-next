@@ -7,6 +7,7 @@ export const API_ENDPOINT = API_ENDPOINT_SCHEME + '://' + API_ENDPOINT_HOST + ':
 export const POSTS_API_ENDPOINT = API_ENDPOINT + '/posts';
 export const USER_API_ENDPOINT = API_ENDPOINT + '/user';
 export const TAGS_API_ENDPOINT = API_ENDPOINT + '/tags';
+export const CATEGORIES_API_ENDPOINT = API_ENDPOINT + '/categories';
 export const USER_SIGNUP_API_ENDPOINT = API_ENDPOINT + '/user/signup';
 export const USER_LOGIN_API_ENDPOINT = API_ENDPOINT + '/user/login';
 export const USER_LOGOUT_API_ENDPOINT = API_ENDPOINT + '/user/logout';

@@ -32,7 +32,7 @@ export const PostNewDetailSurfboard: React.FC<PostNewDetailSurfboardProps> = ({
       <div className="flex flex-col my-4 w-full">
         <p className="font-sans mb-2 text-sm text-gray-700">スキルレベル</p>
         <DropdownMenu
-          label={skillValue.label}
+          label={skillValue.label ?? '選択する'}
           items={tags
             .filter((tag) => tag.type === 'Skill Level')
             .map((tag) => ({
@@ -44,7 +44,7 @@ export const PostNewDetailSurfboard: React.FC<PostNewDetailSurfboardProps> = ({
       <div className="flex flex-col my-4 w-full">
         <p className="font-sans mb-2 text-sm text-gray-700">ブランド</p>
         <DropdownMenu
-          label={brandValue.label}
+          label={brandValue.label ?? '選択する'}
           items={tags
             .filter((tag) => tag.type === 'Surfboard Brand')
             .map((tag) => ({
