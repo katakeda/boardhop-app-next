@@ -105,7 +105,7 @@ export const submitPost = async (
 
     return {
       post: data.post,
-      error: data.post ? null : 'Failed to get submit post',
+      error: data.post ? null : 'Failed to submit post',
     };
   } catch (error) {
     return {

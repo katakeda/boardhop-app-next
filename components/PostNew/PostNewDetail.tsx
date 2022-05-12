@@ -4,7 +4,7 @@ import { Result } from '@mapbox/mapbox-gl-geocoder';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { PickupLocation, Rate } from '../../types/common';
+import { PickupLocation, Rate, Tag } from '../../types/common';
 import { RateMap } from '../../utils/constants';
 import mapboxgl, {
   DEFAULT_CENTER,
@@ -64,6 +64,8 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [formError, setFormError] = useState<Error | any | unknown>(null);
   const [rateValue, setRateValue] = useState<Rate | string>('');
+  const [skillValue, setSkillValue] = useState<Tag>({} as Tag);
+  const [brandValue, setBrandValue] = useState<Tag>({} as Tag);
   const [pickupLocation, setPickupLocation] = useState<PickupLocation>(
     {} as PickupLocation
   );
@@ -154,6 +156,8 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
 
       const payload = new FormData();
       payload.append('data', JSON.stringify(data));
+      payload.append('tag_ids', skillValue?.id);
+      payload.append('tag_ids', brandValue?.id);
       images.forEach((image) => {
         payload.append('images', image.file, image.file.name);
       });
@@ -171,8 +175,7 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
     }
   };
 
-  let PostNewDetailInner: React.FC;
-
+  let PostNewDetailInner;
   switch (rootCategory) {
     case 'surfboard':
       PostNewDetailInner = PostNewDetailSurfboard;
@@ -266,7 +269,14 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
               component="div"
             />
           </div>
-          <PostNewDetailInner />
+          <PostNewDetailInner
+            skillValue={skillValue}
+            brandValue={brandValue}
+            setSkillValue={setSkillValue}
+            setBrandValue={setBrandValue}
+          />
+          <Field type="hidden" name="skill" value={skillValue.id} />
+          <Field type="hidden" name="brand" value={brandValue.id} />
           <div className="flex flex-col my-4 w-full">
             <p className="font-sans mb-2 text-sm text-gray-700">
               デポジット金額
@@ -280,7 +290,7 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
           <div className="flex flex-col my-4 w-full">
             <p className="font-sans mb-2 text-sm text-gray-700">地域</p>
             <div ref={mapRef} className="w-full h-64 rounded-md shadow-sm" />
-            <Field type="hidden" name="location" value={rateValue} />
+            <Field type="hidden" name="location" value={pickupLocation} />
           </div>
           <div className="flex flex-col my-4 w-full">
             <p className="font-sans mb-2 text-sm text-gray-700">
@@ -298,7 +308,7 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
                   <Image
                     className="rounded-md"
                     src={image.url}
-                    alt={image.name}
+                    alt={image.url}
                     layout="fill"
                     objectFit="cover"
                   />

@@ -3,12 +3,12 @@ import type { AppProps } from 'next/app';
 import { ReactElement, ReactNode } from 'react';
 
 export type NextPageWithLayout = NextPage & {
-  getLayout?: (page: ReactElement) => ReactNode
-}
+  getLayout?: (page: ReactElement) => ReactNode;
+};
 
 export type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout
-}
+  Component: NextPageWithLayout;
+};
 
 export type ErrorString = string | null;
 
@@ -80,6 +80,10 @@ export interface PostsParams extends PaginateParams {
   brands?: Set<string>;
 }
 
+export interface TagsParams {
+  type: string;
+}
+
 export interface Category {
   id: string;
   label: string;
@@ -87,9 +91,16 @@ export interface Category {
   children: Array<Category> | null;
 }
 
+export interface Tag {
+  id: string;
+  type: string;
+  value: string;
+  label: string;
+}
+
 export type ResponseData = {
   error?: string | null;
-}
+};
 
 export interface EmailPasswordCredentials {
   email: string;
