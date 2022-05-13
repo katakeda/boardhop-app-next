@@ -1,4 +1,3 @@
-import useSWR from 'swr';
 import {
   MediaType,
   PickupLocation,
@@ -6,10 +5,13 @@ import {
   PostMedia,
   PostsParams,
   Rate,
+  User,
 } from '../types/common';
 import { DEFAULT_POST_IMAGE_LINK, POSTS_API_ENDPOINT } from './constants';
 
-export const getPosts = async (postsParams: PostsParams) => {
+export const getPosts = async (
+  postsParams: PostsParams
+): Promise<{ posts: Array<Post>; error: any }> => {
   let queryArr: Array<string> = [];
   if (Number(postsParams.page) > 0) {
     queryArr.push(`p=${postsParams.page}`);
@@ -34,9 +36,10 @@ export const getPosts = async (postsParams: PostsParams) => {
   }
 
   try {
+    const options = { method: 'GET' };
     const response = await fetch(
       `${POSTS_API_ENDPOINT}?${queryArr.join('&')}`,
-      { method: 'GET' }
+      options
     );
 
     if (response.status >= 300) {
@@ -47,9 +50,10 @@ export const getPosts = async (postsParams: PostsParams) => {
     }
 
     const data = await response.json();
+    const posts = data.posts.map(convertResponseDataToPost);
 
     return {
-      posts: data?.posts ?? [],
+      posts: posts,
       error: null,
     };
   } catch (error) {
@@ -60,27 +64,40 @@ export const getPosts = async (postsParams: PostsParams) => {
   }
 };
 
-export const useGetPost = (
+export const getPost = async (
   id: string | Array<string> | undefined
-): {
-  post: Post;
-  isLoading: boolean;
-  isError: boolean;
-} => {
+): Promise<{
+  post: Post | null;
+  error: any;
+}> => {
   if (typeof id !== 'string') {
     id = '';
   }
 
-  const options = { method: 'GET' };
-  const url = `${POSTS_API_ENDPOINT}/${id}`;
-  const fetcher = () => fetch(url, options).then((res) => res.json());
-  const { data, error } = useSWR(url, fetcher);
+  try {
+    const options = { method: 'GET' };
+    const response = await fetch(`${POSTS_API_ENDPOINT}/${id}`, options);
 
-  return {
-    post: data?.post ?? {},
-    isLoading: !data && !error,
-    isError: !!error,
-  };
+    if (response.status >= 300) {
+      return {
+        post: null,
+        error: response.statusText,
+      };
+    }
+
+    const data = await response.json();
+    const post = convertResponseDataToPost(data.post);
+
+    return {
+      post: post,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      post: null,
+      error: 'Failed to get post',
+    };
+  }
 };
 
 export const submitPost = async (
@@ -139,5 +156,36 @@ export const generateMockPost = (): Post => {
     pickupLocation,
     medias,
     createdAt: new Date(),
+  };
+};
+
+export const convertResponseDataToPost = (data: any): Post => {
+  const user: User = {
+    id: data.userId,
+    email: data.email,
+    firstName: data.firstName,
+    lastName: data.lastName,
+    avatarUrl: data.avatarUrl,
+  };
+
+  const medias: Array<PostMedia> = data.medias.map((media: any) => ({
+    id: media.id,
+    url: media.mediaUrl,
+    type: media.type,
+  }));
+
+  return {
+    id: data.id,
+    title: data.title,
+    description: data.description,
+    price: data.price,
+    rate: data.rate,
+    pickupLocation: {
+      latitude: data.pickupLatitude,
+      longitude: data.pickupLongitude,
+    },
+    medias: medias,
+    createdAt: data.createdAt,
+    user,
   };
 };

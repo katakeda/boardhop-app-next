@@ -1,41 +1,26 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { MediaType, Post, PostMedia, User } from '../../../types/common';
+import { Post, ResponseData } from '../../../types/common';
 
-type Data = {
-  post: Post;
-}
+type GetData = {
+  post: Post | null;
+} & ResponseData;
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse<GetData>) => {
   const options = { method: 'GET' };
-  const response = await fetch(`${process.env.BACKEND_API_ENDPOINT}/posts/${req.query.id}`, options);
-  const data = await response.json();
+  const response = await fetch(
+    `${process.env.BACKEND_API_ENDPOINT}/posts/${req.query.id}`,
+    options
+  );
 
-  const user: User = {
-    id: data.userId,
-    email: data.email,
-    firstName: data.firstName,
-    lastName: data.lastName,
-    avatarUrl: data.avatarUrl,
-  }
-  const media: PostMedia = {
-    id: '',
-    url: '',
-    type: MediaType.IMAGE,
+  if (response.status >= 400) {
+    return res
+      .status(response.status)
+      .json({ post: null, error: response.statusText });
   }
 
-  const post: Post = {
-    id: data.id,
-    title: data.title,
-    description: data.description,
-    price: data.price,
-    rate: data.rate,
-    pickupLocation: { latitude: data.pickupLatitude, longitude: data.pickupLongitude },
-    medias: [media],
-    createdAt: data.createdAt,
-    user,
-  }
+  const post = await response.json();
 
   res.status(200).json({ post });
-}
+};
 
 export default handler;

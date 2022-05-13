@@ -1,11 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import {
-  MediaType,
-  Post,
-  PostMedia,
-  ResponseData,
-  User,
-} from '../../../types/common';
+import { Post, ResponseData } from '../../../types/common';
 
 type GetData = {
   posts: Array<Post>;
@@ -51,9 +45,7 @@ const handleGet = async (
       .json({ posts: [], error: response.statusText });
   }
 
-  const results = await response.json();
-
-  const posts = results.map(convertResponseDataToPost);
+  const posts = await response.json();
 
   return res.status(200).json({ posts });
 };
@@ -84,41 +76,9 @@ const handlePost = async (
       .json({ post: null, error: response.statusText });
   }
 
-  const responseData = await response.json();
+  const post = await response.json();
 
-  return res
-    .status(200)
-    .json({ post: convertResponseDataToPost(responseData) });
-};
-
-const convertResponseDataToPost = (data: any): Post => {
-  const user: User = {
-    id: data.userId,
-    email: data.email,
-    firstName: data.firstName,
-    lastName: data.lastName,
-    avatarUrl: data.avatarUrl,
-  };
-  const media: PostMedia = {
-    id: '',
-    url: '',
-    type: MediaType.IMAGE,
-  };
-
-  return {
-    id: data.id,
-    title: data.title,
-    description: data.description,
-    price: data.price,
-    rate: data.rate,
-    pickupLocation: {
-      latitude: data.pickupLatitude,
-      longitude: data.pickupLongitude,
-    },
-    medias: [media],
-    createdAt: data.createdAt,
-    user,
-  };
+  return res.status(200).json({ post });
 };
 
 export default handler;
