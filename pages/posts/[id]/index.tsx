@@ -4,15 +4,11 @@ import { PostDetail } from '../../../components/PostDetail/PostDetail';
 import type { NextPageWithLayout } from '../../../types/common';
 
 const PostDetailPage: NextPageWithLayout = () => {
-  return (
-    <PostDetail />
-  );
-}
+  return <PostDetail />;
+};
 
 PostDetailPage.getLayout = (page: ReactElement) => {
-  return (
-    <DefaultLayout>{page}</DefaultLayout>
-  );
-}
+  return <DefaultLayout>{page}</DefaultLayout>;
+};
 
 export default PostDetailPage;

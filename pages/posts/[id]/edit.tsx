@@ -4,15 +4,11 @@ import { PostEdit } from '../../../components/PostEdit/PostEdit';
 import type { NextPageWithLayout } from '../../../types/common';
 
 const PostEditPage: NextPageWithLayout = () => {
-  return (
-    <PostEdit />
-  );
-}
+  return <PostEdit />;
+};
 
 PostEditPage.getLayout = (page: ReactElement) => {
-  return (
-    <DefaultLayout>{page}</DefaultLayout>
-  );
-}
+  return <DefaultLayout>{page}</DefaultLayout>;
+};
 
 export default PostEditPage;

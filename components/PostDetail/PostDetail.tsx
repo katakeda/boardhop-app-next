@@ -116,7 +116,7 @@ export const PostDetail: React.FC = () => {
           <div className="w-full">
             <button
               className="w-full p-2 rounded-md shadow-sm text-white bg-primary-500"
-              onClick={() => {}}
+              onClick={() => { router.push(`/posts/${post.id}/payment`) }}
             >
               レンタルする
             </button>
