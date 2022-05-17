@@ -185,6 +185,7 @@ export const convertResponseDataToPost = (data: any): Post => {
       longitude: data.pickupLongitude,
     },
     medias: medias,
+    tags: data.tags,
     createdAt: data.createdAt,
     user,
   };

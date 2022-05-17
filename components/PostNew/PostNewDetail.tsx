@@ -21,7 +21,7 @@ import { PostNewDetailSnowboard } from './PostNewDetailSnowboard';
 import { PostNewDetailSurfboard } from './PostNewDetailSurfboard';
 
 // TODO: Fetch this value from auth
-const USER_ID = '3914a799-0d58-45d9-bc13-798d809ff234';
+const USER_ID = 'dde6cdb0-23d1-4657-a60d-2d04d4d6530c';
 
 const MAX_IMAGES_LENGTH = 8;
 

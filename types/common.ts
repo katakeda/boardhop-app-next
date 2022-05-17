@@ -43,7 +43,8 @@ export interface Post {
   price: number;
   rate: Rate;
   pickupLocation: PickupLocation;
-  medias: Array<PostMedia>;
+  medias?: Array<PostMedia>;
+  tags?: Array<Tag>;
   createdAt: Date;
 }
 

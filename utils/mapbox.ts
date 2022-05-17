@@ -15,3 +15,4 @@ export const MapboxGlGeocoder = MapboxGeocoder;
 export const DEFAULT_STYLE = 'mapbox://styles/mapbox/streets-v11';
 export const DEFAULT_CENTER: mapboxgl.LngLatLike = [138.592229549504, 36.3864928218528];
 export const DEFAULT_ZOOM = 5;
+export const DETAILED_ZOOM = 12;
