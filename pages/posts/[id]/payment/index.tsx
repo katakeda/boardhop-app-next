@@ -2,16 +2,16 @@ import { ReactElement, useEffect, useState } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useRouter } from 'next/router';
-import { DefaultLayout } from '../../../components/Common/DefaultLayout';
-import { DefaultLoading } from '../../../components/Common/DefaultLoading';
-import { PostPayment } from '../../../components/PostPayment/PostPayment';
+import { DefaultLayout } from '../../../../components/Common/DefaultLayout';
+import { DefaultLoading } from '../../../../components/Common/DefaultLoading';
+import { PostPayment } from '../../../../components/PostPayment/PostPayment';
 import type {
   NextPageWithLayout,
   PaymentIntentItem,
   Post,
-} from '../../../types/common';
-import { MAX_QUANTITY } from '../../../utils/constants';
-import { getPost } from '../../../utils/frontend/posts';
+} from '../../../../types/common';
+import { MAX_QUANTITY } from '../../../../utils/constants';
+import { getPost } from '../../../../utils/frontend/posts';
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY ?? ''
