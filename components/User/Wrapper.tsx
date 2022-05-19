@@ -4,7 +4,7 @@ interface WrapperProps { }
 
 export const Wrapper: React.FC<WrapperProps> = ({ children }) => {
   return (
-    <div className="flex h-full justify-center">
+    <div className="flex h-main justify-center">
       <div className="m-auto">
         <div className="w-96 py-4 px-7 shadow-lg rounded-lg">
           {children}

@@ -29,10 +29,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const idToken = await user.getIdToken();
   const cookieOptions: CookieSerializeOptions = {
     path: '/',
-    expires: new Date((new Date()).getTime() + 24*60*60*1000),
+    expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
     httpOnly: true,
-  }
-  res.setHeader("Set-Cookie", serialize("boardhopauth", idToken, cookieOptions));
+  };
+  res.setHeader(
+    'Set-Cookie',
+    serialize('boardhopauth', idToken, cookieOptions)
+  );
 
   const options = {
     method: 'POST',
@@ -40,18 +43,25 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ ...req.body, googleAuthId: user.uid }),
-  }
+  };
 
-  const response = await fetch(`${process.env.BACKEND_API_ENDPOINT}/user/login`, options);
+  const response = await fetch(
+    `${process.env.BACKEND_API_ENDPOINT}/user/login`,
+    options
+  );
 
   if (response.status >= 400) {
-    return res.status(response.status).json({ user: null, error: response.statusText });
+    return res
+      .status(response.status)
+      .json({ user: null, error: response.statusText });
   }
 
-  const responseData = await response.json();
+  const data = await response.json();
 
-  return res.status(200).json({ user: convertResponseDataToUser(responseData) });
-}
+  return res
+    .status(200)
+    .json({ user: convertResponseDataToUser(data) });
+};
 
 const convertResponseDataToUser = (data: any): User => {
   return {
@@ -60,7 +70,7 @@ const convertResponseDataToUser = (data: any): User => {
     firstName: data.firstName,
     lastName: data.lastName,
     avatarUrl: data.avatarUrl,
-  }
-}
+  };
+};
 
 export default handler;

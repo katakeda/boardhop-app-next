@@ -1,12 +1,12 @@
+import React, { useState } from 'react';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
 import { Action, useAuthContext } from '../../contexts/AuthContext';
 import { signup } from '../../utils/user';
 import { Wrapper } from './Wrapper';
 
-interface SignupProps { }
+interface SignupProps {}
 
 interface FormValues {
   firstName: string;
@@ -27,7 +27,7 @@ const initialValues: FormValues = {
   lastName: '',
   email: '',
   password: '',
-}
+};
 
 export const Signup: React.FC<SignupProps> = () => {
   const router = useRouter();
@@ -42,17 +42,17 @@ export const Signup: React.FC<SignupProps> = () => {
       errors.firstName = '必須';
     }
     if (!values.lastName) {
-      errors.lastName = '必須'
+      errors.lastName = '必須';
     }
     if (!values.email) {
-      errors.email = '必須'
+      errors.email = '必須';
     }
     if (!values.password) {
-      errors.password = '必須'
+      errors.password = '必須';
     }
 
     return errors;
-  }
+  };
 
   const handleSubmit = async (values: FormValues) => {
     setLoading(true);
@@ -78,7 +78,7 @@ export const Signup: React.FC<SignupProps> = () => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
     <Wrapper>
@@ -89,7 +89,9 @@ export const Signup: React.FC<SignupProps> = () => {
         </section>
       )}
       <section>
-        <p className="text-center text-2xl text-gray-700 font-semibold">新規登録</p>
+        <p className="text-center text-2xl text-gray-700 font-sans font-semibold">
+          新規登録
+        </p>
       </section>
       <section className="flex flex-col mt-7">
         <Formik
@@ -100,17 +102,53 @@ export const Signup: React.FC<SignupProps> = () => {
           <Form>
             <div className="flex flex-col space-y-4">
               <div className="flex flex-col space-y-4">
-                <ErrorMessage className="p-1 text-red-500" name="lastName" component="div" />
-                <Field className="py-3 px-3 border-2 border-gray-300 rounded-md focus:outline-none" name="lastName" type="text" placeholder="性" />
-                <ErrorMessage className="p-1 text-red-500" name="firstName" component="div" />
-                <Field className="py-3 px-3 border-2 border-gray-300 rounded-md focus:outline-none" name="firstName" type="text" placeholder="名" />
-                <ErrorMessage className="p-1 text-red-500" name="email" component="div" />
-                <Field className="py-3 px-3 border-2 border-gray-300 rounded-md focus:outline-none" name="email" type="text" placeholder="Eメール" />
-                <ErrorMessage className="p-1 text-red-500" name="password" component="div" />
-                <Field className="py-3 px-3 border-2 border-gray-300 rounded-md focus:outline-none" name="password" type="password" placeholder="パスワード" />
+                <ErrorMessage
+                  className="p-1 text-red-500"
+                  name="lastName"
+                  component="div"
+                />
+                <Field
+                  className="py-3 px-3 border-2 border-gray-300 rounded-md focus:outline-none"
+                  name="lastName"
+                  type="text"
+                  placeholder="性"
+                />
+                <ErrorMessage
+                  className="p-1 text-red-500"
+                  name="firstName"
+                  component="div"
+                />
+                <Field
+                  className="py-3 px-3 border-2 border-gray-300 rounded-md focus:outline-none"
+                  name="firstName"
+                  type="text"
+                  placeholder="名"
+                />
+                <ErrorMessage
+                  className="p-1 text-red-500"
+                  name="email"
+                  component="div"
+                />
+                <Field
+                  className="py-3 px-3 border-2 border-gray-300 rounded-md focus:outline-none"
+                  name="email"
+                  type="text"
+                  placeholder="Eメール"
+                />
+                <ErrorMessage
+                  className="p-1 text-red-500"
+                  name="password"
+                  component="div"
+                />
+                <Field
+                  className="py-3 px-3 border-2 border-gray-300 rounded-md focus:outline-none"
+                  name="password"
+                  type="password"
+                  placeholder="パスワード"
+                />
               </div>
               <button
-                className="py-3 px-3 border-2 border-green-600 bg-green-600 text-white text-base font-semibold rounded-md focus:outline-none hover:bg-green-50 hover:text-green-600 transform duration-500"
+                className="w-full p-3 rounded-md shadow-sm text-white bg-primary-500"
                 type="submit"
                 disabled={loading}
               >
@@ -128,4 +166,4 @@ export const Signup: React.FC<SignupProps> = () => {
       </section>
     </Wrapper>
   );
-}
+};
