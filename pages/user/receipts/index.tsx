@@ -1,10 +1,10 @@
 import type { ReactElement } from 'react';
 import { DefaultLayout } from '../../../components/Common/DefaultLayout';
-import { Dashboard } from '../../../components/User/Dashboard';
+import { Receipts } from '../../../components/User/Receipts';
 import type { NextPageWithLayout } from '../../../types/common';
 
 const IndexPage: NextPageWithLayout = () => {
-  return <Dashboard />;
+  return <Receipts />;
 };
 
 IndexPage.getLayout = (page: ReactElement) => {

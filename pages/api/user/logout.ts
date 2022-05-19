@@ -2,7 +2,7 @@ import { CookieSerializeOptions, serialize } from 'cookie';
 import { FirebaseError } from 'firebase/app';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ResponseData } from '../../../types/common';
-import { getAuthErrorMessage, logout } from '../../../utils/firebase';
+import { getAuthErrorMessage, logout } from '../../../utils/backend/firebase';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) => {
   try {

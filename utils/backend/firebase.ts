@@ -1,6 +1,6 @@
 import * as firebase from 'firebase/app';
 import * as firebaseAuth from 'firebase/auth';
-import { EmailPasswordCredentials } from '../types/common';
+import { EmailPasswordCredentials } from '../../types/common';
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,

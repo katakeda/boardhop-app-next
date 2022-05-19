@@ -1,7 +1,7 @@
 import { FirebaseError } from 'firebase/app';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ResponseData, User } from '../../../types/common';
-import { getAuthErrorMessage, signup } from '../../../utils/firebase';
+import { getAuthErrorMessage, signup } from '../../../utils/backend/firebase';
 import { serialize, CookieSerializeOptions } from 'cookie';
 
 type Data = {

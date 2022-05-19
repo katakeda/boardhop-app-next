@@ -115,3 +115,9 @@ export interface EmailPasswordCredentials {
   email: string;
   password: string;
 }
+
+export interface PaymentIntentItem {
+  id: string;
+  price: number;
+  quantity: number;
+}

@@ -1,5 +1,9 @@
 import { Rate } from "../types/common";
 
+export const APP_URL_SCHEME = process.env.NEXT_PUBLIC_APP_URL_SCHEME;
+export const APP_URL_HOST = process.env.NEXT_PUBLIC_APP_URL_HOST;
+export const APP_URL_PORT = process.env.NEXT_PUBLIC_APP_URL_PORT;
+export const APP_URL = APP_URL_SCHEME + '://' + APP_URL_HOST + ':' + APP_URL_PORT;
 export const API_ENDPOINT_SCHEME = process.env.NEXT_PUBLIC_API_ENDPOINT_SCHEME;
 export const API_ENDPOINT_HOST = process.env.NEXT_PUBLIC_API_ENDPOINT_HOST;
 export const API_ENDPOINT_PORT = process.env.NEXT_PUBLIC_API_ENDPOINT_PORT;

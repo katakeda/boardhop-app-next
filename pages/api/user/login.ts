@@ -2,7 +2,7 @@ import { CookieSerializeOptions, serialize } from 'cookie';
 import { FirebaseError } from 'firebase/app';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ResponseData, User } from '../../../types/common';
-import { getAuthErrorMessage, login } from '../../../utils/firebase';
+import { getAuthErrorMessage, login } from '../../../utils/backend/firebase';
 
 type Data = {
   user: User | null;
