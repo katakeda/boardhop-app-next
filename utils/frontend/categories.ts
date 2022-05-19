@@ -1,5 +1,5 @@
-import { Category } from '../types/common';
-import { CATEGORIES_API_ENDPOINT } from './constants';
+import { Category } from '../../types/common';
+import { CATEGORIES_API_ENDPOINT } from '../constants';
 
 export const getCategories = async (): Promise<{
   categories: Array<Category> | null;

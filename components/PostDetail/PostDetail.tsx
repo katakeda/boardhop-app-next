@@ -9,8 +9,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { MediaType, Post, PostMedia, Tag } from '../../types/common';
 import { RateMap } from '../../utils/constants';
-import mapboxgl, { DEFAULT_STYLE, DETAILED_ZOOM } from '../../utils/mapbox';
-import { getPost } from '../../utils/posts';
+import mapboxgl, { DEFAULT_STYLE, DETAILED_ZOOM } from '../../utils/frontend/mapbox';
+import { getPost } from '../../utils/frontend/posts';
 import { DefaultLoading } from '../Common/DefaultLoading';
 
 const PostDetailTags: React.FC<{

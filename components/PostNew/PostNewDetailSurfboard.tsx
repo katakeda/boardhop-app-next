@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Tag } from '../../types/common';
-import { getTags } from '../../utils/tags';
+import { getTags } from '../../utils/frontend/tags';
 import { DropdownMenu } from '../Common/DropdownMenu';
 
 interface PostNewDetailSurfboardProps {

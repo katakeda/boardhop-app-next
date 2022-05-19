@@ -6,8 +6,8 @@ import {
   PostsParams,
   Rate,
   User,
-} from '../types/common';
-import { DEFAULT_POST_IMAGE_LINK, POSTS_API_ENDPOINT } from './constants';
+} from '../../types/common';
+import { DEFAULT_POST_IMAGE_LINK, POSTS_API_ENDPOINT } from '../constants';
 
 export const getPosts = async (
   postsParams: PostsParams

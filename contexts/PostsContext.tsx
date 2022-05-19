@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import { createContext, useContextSelector } from 'use-context-selector';
 import { Post, PostsParams } from '../types/common';
-import { getPosts } from '../utils/posts';
+import { getPosts } from '../utils/frontend/posts';
 
 export enum Action {
   SET_POSTS = 'SET_POSTS',

@@ -1,5 +1,5 @@
-import { TagsParams } from "../types/common";
-import { TAGS_API_ENDPOINT } from "./constants";
+import { TagsParams } from "../../types/common";
+import { TAGS_API_ENDPOINT } from "../constants";
 
 
 export const getTags = async (params: TagsParams) => {

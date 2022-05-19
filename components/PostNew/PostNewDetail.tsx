@@ -5,15 +5,15 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { Category, PickupLocation, Rate, Tag } from '../../types/common';
-import { getCategories } from '../../utils/categories';
+import { getCategories } from '../../utils/frontend/categories';
 import { RateMap } from '../../utils/constants';
 import mapboxgl, {
   DEFAULT_CENTER,
   DEFAULT_STYLE,
   DEFAULT_ZOOM,
   MapboxGlGeocoder,
-} from '../../utils/mapbox';
-import { submitPost } from '../../utils/posts';
+} from '../../utils/frontend/mapbox';
+import { submitPost } from '../../utils/frontend/posts';
 import { DefaultError } from '../Common/DefaultError';
 import { DefaultLoading } from '../Common/DefaultLoading';
 import { DropdownMenu } from '../Common/DropdownMenu';

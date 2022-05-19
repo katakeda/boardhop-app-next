@@ -10,7 +10,7 @@ import type {
   PaymentIntentItem,
   Post,
 } from '../../../types/common';
-import { getPost } from '../../../utils/posts';
+import { getPost } from '../../../utils/frontend/posts';
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY ?? ''

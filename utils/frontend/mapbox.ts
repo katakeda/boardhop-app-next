@@ -2,7 +2,7 @@ import mapboxgl from 'mapbox-gl';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-import { MAPBOX_ACCESS_TOKEN } from './constants';
+import { MAPBOX_ACCESS_TOKEN } from '../constants';
 
 // Set access token before export
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN || '';
