@@ -39,7 +39,7 @@ const handlePost = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const calculateTotal = (items: Array<PaymentIntentItem>): number => {
   return items.reduce((prev, curr) => {
-    return prev + curr.price * Math.max(curr.quantity, MAX_QUANTITY);
+    return prev + curr.price * Math.min(curr.quantity, MAX_QUANTITY);
   }, 0);
 };
 

@@ -27,7 +27,7 @@ const PostPaymentPage: NextPageWithLayout = () => {
     if (post) {
       const quant =
         typeof quantity === 'string'
-          ? Math.max(parseInt(quantity), MAX_QUANTITY)
+          ? Math.min(parseInt(quantity), MAX_QUANTITY)
           : 1;
       const items: Array<PaymentIntentItem> = [
         { id: post.id, price: post.price, quantity: quant },
