@@ -23,3 +23,5 @@ export const MAPBOX_ACCESS_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
 export const RateMap: Record<Rate, string> = {} as Record<Rate, string>;
 RateMap[Rate.HOUR] = '時';
 RateMap[Rate.DAY] = '日';
+
+export const MAX_QUANTITY = 30;

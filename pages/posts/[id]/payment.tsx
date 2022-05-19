@@ -10,6 +10,7 @@ import type {
   PaymentIntentItem,
   Post,
 } from '../../../types/common';
+import { MAX_QUANTITY } from '../../../utils/constants';
 import { getPost } from '../../../utils/frontend/posts';
 
 const stripePromise = loadStripe(
@@ -24,7 +25,10 @@ const PostPaymentPage: NextPageWithLayout = () => {
 
   useEffect(() => {
     if (post) {
-      const quant = typeof quantity === 'string' ? parseInt(quantity) : 1;
+      const quant =
+        typeof quantity === 'string'
+          ? Math.max(parseInt(quantity), MAX_QUANTITY)
+          : 1;
       const items: Array<PaymentIntentItem> = [
         { id: post.id, price: post.price, quantity: quant },
       ];

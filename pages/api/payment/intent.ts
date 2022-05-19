@@ -1,11 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { methodNotAllowed } from '../../../utils/backend/http';
 import Stripe from 'stripe';
-import {
-  DEFAULT_CURRENCY,
-  TRANSACTION_RATE,
-} from '../../../utils/backend/constants';
 import { PaymentIntentItem } from '../../../types/common';
+import { DEFAULT_CURRENCY } from '../../../utils/backend/constants';
+import { methodNotAllowed } from '../../../utils/backend/http';
+import { MAX_QUANTITY } from '../../../utils/constants';
 
 const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY ?? '', {
   // @ts-ignore
@@ -41,7 +39,7 @@ const handlePost = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const calculateTotal = (items: Array<PaymentIntentItem>): number => {
   return items.reduce((prev, curr) => {
-    return prev + curr.price * curr.quantity;
+    return prev + curr.price * Math.max(curr.quantity, MAX_QUANTITY);
   }, 0);
 };
 
