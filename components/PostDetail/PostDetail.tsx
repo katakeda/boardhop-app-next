@@ -8,8 +8,12 @@ import {
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { MediaType, Post, PostMedia, Tag } from '../../types/common';
-import { RateMap } from '../../utils/constants';
-import mapboxgl, { DEFAULT_STYLE, DETAILED_ZOOM } from '../../utils/frontend/mapbox';
+import { currencyFormat } from '../../utils/common';
+import { MAX_QUANTITY, RateMap } from '../../utils/constants';
+import mapboxgl, {
+  DEFAULT_STYLE,
+  DETAILED_ZOOM,
+} from '../../utils/frontend/mapbox';
 import { getPost } from '../../utils/frontend/posts';
 import { DefaultLoading } from '../Common/DefaultLoading';
 
@@ -32,6 +36,7 @@ const PostDetailTags: React.FC<{
 export const PostDetail: React.FC = () => {
   const router = useRouter();
   const mapRef = useRef<HTMLDivElement>(null);
+  const quantRef = useRef<HTMLInputElement>(null);
   const [post, setPost] = useState<Post | null>(null);
   const { id } = router.query;
 
@@ -109,14 +114,25 @@ export const PostDetail: React.FC = () => {
             <p>{post.description}</p>
           </div>
           <div className="font-sans text-xl text-gray-900">
-            <p>
-              {post.price}円/{RateMap[post.rate]}
-            </p>
+            <span>
+              {currencyFormat(post.price)}円/{RateMap[post.rate]}
+            </span>
+            <input
+              type="number"
+              className="ml-2 py-1 px-2 w-14 rounded-md border border-gray-300 text-base text-gray-700 text-center appearance-none"
+              ref={quantRef}
+              max={MAX_QUANTITY}
+              defaultValue={1}
+            />
           </div>
           <div className="w-full">
             <button
               className="w-full p-2 rounded-md shadow-sm text-white bg-primary-500"
-              onClick={() => { router.push(`/posts/${post.id}/payment`) }}
+              onClick={() => {
+                router.push(
+                  `/posts/${post.id}/payment?quantity=${quantRef.current?.value}`
+                );
+              }}
             >
               レンタルする
             </button>
