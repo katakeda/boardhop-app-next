@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { APP_URL } from '../../../utils/constants';
 import { getUserResponse } from '../../../utils/user';
 
 export async function middleware(req: NextRequest) {
@@ -7,7 +8,7 @@ export async function middleware(req: NextRequest) {
   if (response.ok) {
     const data = await response.json();
     if (data && data.id) {
-      return NextResponse.redirect('/user/settings');
+      return NextResponse.redirect(`${APP_URL}/user/settings`);
     }
   }
 
