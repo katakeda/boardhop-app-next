@@ -109,6 +109,7 @@ export interface Tag {
 
 export type ResponseData = {
   error?: string | null;
+  redirectUrl?: string | null;
 };
 
 export interface EmailPasswordCredentials {

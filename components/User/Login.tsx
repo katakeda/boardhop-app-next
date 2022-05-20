@@ -47,13 +47,13 @@ export const Login: React.FC = () => {
       const { email, password } = values;
       const payload = { email, password };
 
-      const { user, error } = await login(payload);
+      const { user, error, redirectUrl } = await login(payload);
 
       if (error || !user) {
         setFormError(error ?? new Error('Something went wrong'));
       } else {
         dispatch({ type: Action.SET_USER, payload: user });
-        router.push('/user/settings');
+        router.push(redirectUrl ?? '/user/settings');
       }
     } catch (error) {
       setFormError(error);

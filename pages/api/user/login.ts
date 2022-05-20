@@ -1,8 +1,8 @@
-import { CookieSerializeOptions, serialize } from 'cookie';
-import { FirebaseError } from 'firebase/app';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { FirebaseError } from 'firebase/app';
 import { ResponseData, User } from '../../../types/common';
 import { getAuthErrorMessage, login } from '../../../utils/backend/firebase';
+import { setApiCookie } from '../../../utils/backend/http';
 
 type Data = {
   user: User | null;
@@ -27,15 +27,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
   // FIXME: Not good practice to store JWT token in cookie
   const idToken = await user.getIdToken();
-  const cookieOptions: CookieSerializeOptions = {
-    path: '/',
-    expires: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
-    httpOnly: true,
-  };
-  res.setHeader(
-    'Set-Cookie',
-    serialize('boardhopauth', idToken, cookieOptions)
-  );
+  setApiCookie(res, 'boardhop_auth', idToken);
 
   const options = {
     method: 'POST',
@@ -58,9 +50,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
   const data = await response.json();
 
-  return res
-    .status(200)
-    .json({ user: convertResponseDataToUser(data) });
+  return res.status(200).json({
+    user: convertResponseDataToUser(data),
+    redirectUrl: req.cookies.boardhop_post_login_url,
+  });
 };
 
 const convertResponseDataToUser = (data: any): User => {

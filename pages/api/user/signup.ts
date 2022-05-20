@@ -1,8 +1,8 @@
-import { FirebaseError } from 'firebase/app';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { FirebaseError } from 'firebase/app';
 import { ResponseData, User } from '../../../types/common';
 import { getAuthErrorMessage, signup } from '../../../utils/backend/firebase';
-import { serialize, CookieSerializeOptions } from 'cookie';
+import { setApiCookie } from '../../../utils/backend/http';
 
 type Data = {
   user: User | null;
@@ -27,12 +27,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
   // FIXME: Not good practice to store JWT token in cookie
   const idToken = await user.getIdToken();
-  const cookieOptions: CookieSerializeOptions = {
-    path: '/',
-    expires: new Date((new Date()).getTime() + 24*60*60*1000),
-    httpOnly: true,
-  }
-  res.setHeader("Set-Cookie", serialize("boardhopauth", idToken, cookieOptions));
+  setApiCookie(res, 'boardhop_auth', idToken);
 
   const options = {
     method: 'POST',
@@ -40,18 +35,25 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ ...req.body, googleAuthId: user.uid }),
-  }
+  };
 
-  const response = await fetch(`${process.env.BACKEND_API_ENDPOINT}/user/signup`, options);
+  const response = await fetch(
+    `${process.env.BACKEND_API_ENDPOINT}/user/signup`,
+    options
+  );
 
   if (response.status >= 400) {
-    return res.status(response.status).json({ user: null, error: response.statusText });
+    return res
+      .status(response.status)
+      .json({ user: null, error: response.statusText });
   }
 
   const responseData = await response.json();
 
-  return res.status(200).json({ user: convertResponseDataToUser(responseData) });
-}
+  return res
+    .status(200)
+    .json({ user: convertResponseDataToUser(responseData) });
+};
 
 const convertResponseDataToUser = (data: any): User => {
   return {
@@ -60,7 +62,7 @@ const convertResponseDataToUser = (data: any): User => {
     firstName: data.firstName,
     lastName: data.lastName,
     avatarUrl: data.avatarUrl,
-  }
-}
+  };
+};
 
 export default handler;

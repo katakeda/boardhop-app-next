@@ -1,10 +1,13 @@
-import { CookieSerializeOptions, serialize } from 'cookie';
-import { FirebaseError } from 'firebase/app';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { FirebaseError } from 'firebase/app';
 import { ResponseData } from '../../../types/common';
 import { getAuthErrorMessage, logout } from '../../../utils/backend/firebase';
+import { setApiCookie } from '../../../utils/backend/http';
 
-const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) => {
+const handler = async (
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>
+) => {
   try {
     await logout();
   } catch (error) {
@@ -16,14 +19,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
   }
 
   // FIXME: Not good practice to store JWT token in cookie
-  const cookieOptions: CookieSerializeOptions = {
-    path: '/',
-    expires: new Date(0),
-    httpOnly: true,
-  }
-  res.setHeader("Set-Cookie", serialize("boardhopauth", '', cookieOptions));
+  setApiCookie(res, 'boardhop_auth', '', { expires: new Date(0) });
 
   return res.status(200).json({});
-}
+};
 
 export default handler;

@@ -1,6 +1,5 @@
 import { NextApiRequest } from "next";
 import { NextRequest } from "next/server";
-import useSWR from "swr";
 import { User } from "../types/common";
 import { USER_API_ENDPOINT, USER_LOGIN_API_ENDPOINT, USER_LOGOUT_API_ENDPOINT, USER_SIGNUP_API_ENDPOINT } from "./constants";
 
@@ -31,7 +30,7 @@ export const getUserResponse = async (req: NextRequest | NextApiRequest) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${req.cookies.boardhopauth}`
+      'Authorization': `Bearer ${req.cookies.boardhop_auth}`
     },
   }
 
@@ -95,6 +94,7 @@ export const login = async (payload: LoginPayload) => {
     return {
       user: data?.user ?? {},
       error: null,
+      redirectUrl: data?.redirectUrl,
     }
   } catch (error) {
     return {
@@ -133,16 +133,6 @@ export const getUser = async () => {
     }
   } catch (error) {
     return { user: null, error };
-  }
-}
-
-export const useGetUser = (): GetUserResponse => {
-  const { data, error } = useSWR(USER_API_ENDPOINT, userFetcher);
-
-  return {
-    user: data?.user ?? {},
-    isLoading: !data && !error,
-    isError: !!error,
   }
 }
 
