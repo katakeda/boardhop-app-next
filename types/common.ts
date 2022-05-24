@@ -122,3 +122,9 @@ export interface PaymentIntentItem {
   price: number;
   quantity: number;
 }
+
+export enum OrderStatus {
+  PENDING = 'pending',
+  COMPLETE = 'complete',
+  CANCELED = 'canceled',
+}

@@ -30,6 +30,10 @@ const handlePost = async (req: NextApiRequest, res: NextApiResponse) => {
     automatic_payment_methods: {
       enabled: true,
     },
+    metadata: {
+      postId: items[0].id,
+      quantity: items[0].quantity,
+    },
   });
 
   res.send({

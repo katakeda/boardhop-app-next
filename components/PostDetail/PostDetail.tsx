@@ -7,7 +7,6 @@ import {
 } from '@heroicons/react/outline';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useAuthContext } from '../../contexts/AuthContext';
 import { MediaType, Post, PostMedia, Tag } from '../../types/common';
 import { currencyFormat } from '../../utils/common';
 import { MAX_QUANTITY, RateMap } from '../../utils/constants';
@@ -36,7 +35,6 @@ const PostDetailTags: React.FC<{
 
 export const PostDetail: React.FC = () => {
   const router = useRouter();
-  const user = useAuthContext((value) => value.state.user);
   const mapRef = useRef<HTMLDivElement>(null);
   const quantRef = useRef<HTMLInputElement>(null);
   const [post, setPost] = useState<Post | null>(null);

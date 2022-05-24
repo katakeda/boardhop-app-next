@@ -6,7 +6,7 @@ import {
 } from '@stripe/react-stripe-js';
 import { StripeError } from '@stripe/stripe-js';
 import { Post } from '../../types/common';
-import { APP_URL } from '../../utils/constants';
+import { PAYMENT_COMPLETE_API_ENDPOINT } from '../../utils/constants';
 import { SpinIcon } from '../Common/SpinIcon';
 import { currencyFormat } from '../../utils/common';
 
@@ -57,7 +57,7 @@ export const PostPayment: React.FC<{ post: Post; clientSecret: string }> = ({
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${APP_URL}/user/receipts`,
+        return_url: PAYMENT_COMPLETE_API_ENDPOINT,
       },
     });
 
