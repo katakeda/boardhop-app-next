@@ -123,8 +123,32 @@ export interface PaymentIntentItem {
   quantity: number;
 }
 
+export interface Order {
+  id: string;
+  postId: string;
+  userId: string;
+  paymentId: string;
+  status: string;
+  message: string;
+  quantity: number;
+  total: number;
+  createdAt: Date;
+  post: Post;
+  messages: Array<Message>;
+}
+
 export enum OrderStatus {
   PENDING = 'pending',
   COMPLETE = 'complete',
   CANCELED = 'canceled',
+}
+
+export interface Message {
+  id: string;
+  userId: string;
+  postId: string;
+  orderId: string;
+  message: string;
+  createdAt: Date;
+  avatarUrl: string;
 }
