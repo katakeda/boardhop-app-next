@@ -102,7 +102,7 @@ export const ReceiptDetail: React.FC = () => {
         >
           送信
         </button>
-        {order.messages.sort(sortByNewest).map((msgObj) => (
+        {order.messages && order.messages.sort(sortByNewest).map((msgObj) => (
           <div
             className="flex items-center space-x-5 w-full my-3"
             key={msgObj.id}
