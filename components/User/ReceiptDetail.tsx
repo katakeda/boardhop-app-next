@@ -21,7 +21,7 @@ export const ReceiptDetail: React.FC = () => {
     }
   }, [id]);
 
-  const updateOrder = async (id: string | Array<string>) => {
+  const updateOrder = async (id: string | Array<string> | undefined) => {
     const { order, error } = await getOrder(id);
     if (!error && order) {
       setOrder(order);
