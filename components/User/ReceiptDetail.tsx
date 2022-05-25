@@ -16,7 +16,9 @@ export const ReceiptDetail: React.FC = () => {
   const { id } = router.query;
 
   useEffect(() => {
-    updateOrder(id);
+    if (id) {
+      updateOrder(id);
+    }
   }, [id]);
 
   const updateOrder = async (id: string | Array<string> | undefined) => {
