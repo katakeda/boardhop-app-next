@@ -22,6 +22,9 @@ export const getPosts = async (
   if (postsParams.categories && postsParams.categories.size > 0) {
     queryArr.push(`cats=${Array.from(postsParams.categories).join(',')}`);
   }
+  if (postsParams.userId) {
+    queryArr.push(`uid=${postsParams.userId}`);
+  }
 
   let tags: Array<string> = [];
   if (postsParams.skillLevels && postsParams.skillLevels.size > 0) {
@@ -168,11 +171,13 @@ export const convertResponseDataToPost = (data: any): Post => {
     avatarUrl: data.avatarUrl,
   };
 
-  const medias: Array<PostMedia> = data.medias.map((media: any) => ({
-    id: media.id,
-    url: media.mediaUrl,
-    type: media.type,
-  }));
+  const medias: Array<PostMedia> = !data.medias
+    ? []
+    : data.medias.map((media: any) => ({
+        id: media.id,
+        url: media.mediaUrl,
+        type: media.type,
+      }));
 
   return {
     id: data.id,

@@ -8,7 +8,7 @@ export async function middleware(req: NextRequest) {
   if (response.ok) {
     const data = await response.json();
     if (data && data.id) {
-      return NextResponse.redirect(`${APP_URL}/user/settings`);
+      return NextResponse.redirect(`${APP_URL}/user/dashboard`);
     }
   }
 

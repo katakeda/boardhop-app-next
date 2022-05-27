@@ -33,6 +33,9 @@ const handleGet = async (
   if (req.query.cats) {
     queryArr.push(`cats=${req.query.cats}`);
   }
+  if (req.query.uid) {
+    queryArr.push(`uid=${req.query.uid}`);
+  }
   const options = { method: 'GET' };
   const response = await fetch(
     `${process.env.BACKEND_API_ENDPOINT}/posts?${queryArr.join('&')}`,

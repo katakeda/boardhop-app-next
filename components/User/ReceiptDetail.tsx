@@ -3,7 +3,7 @@ import { UserIcon } from '@heroicons/react/outline';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { Order, OrderStatus } from '../../types/common';
-import { currencyFormat, sortByNewest } from '../../utils/common';
+import { currencyFormat, getOrderStatusData, sortByNewest } from '../../utils/common';
 import { API_ENDPOINT } from '../../utils/constants';
 import { getOrder } from '../../utils/frontend/orders';
 import { DefaultLoading } from '../Common/DefaultLoading';
@@ -50,25 +50,7 @@ export const ReceiptDetail: React.FC = () => {
     return <DefaultLoading />;
   }
 
-  let orderStatus, statusClass;
-  switch (order.status) {
-    case OrderStatus.COMPLETE:
-      orderStatus = '完了済み';
-      statusClass = 'bg-green-500';
-      break;
-    case OrderStatus.PENDING:
-      orderStatus = '処理中';
-      statusClass = 'bg-yellow-500';
-      break;
-    case OrderStatus.CANCELED:
-      orderStatus = '失敗';
-      statusClass = 'bg-red-400';
-      break;
-    default:
-      orderStatus = '不明';
-      statusClass = 'bg-gray-400';
-      break;
-  }
+  const [orderStatus, statusClass] = getOrderStatusData(order.status);
 
   return (
     <div className="flex flex-col h-main items-center space-y-96">

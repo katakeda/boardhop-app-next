@@ -53,7 +53,7 @@ export const Login: React.FC = () => {
         setFormError(error ?? new Error('Something went wrong'));
       } else {
         dispatch({ type: Action.SET_USER, payload: user });
-        router.push(redirectUrl ?? '/user/settings');
+        router.push(redirectUrl ?? '/user/dashboard');
       }
     } catch (error) {
       setFormError(error);

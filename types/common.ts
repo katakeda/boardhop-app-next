@@ -79,6 +79,7 @@ export interface PostsParams extends PaginateParams {
   categories?: Set<string>;
   skillLevels?: Set<string>;
   brands?: Set<string>;
+  userId?: string;
 }
 
 export interface TagsParams {
