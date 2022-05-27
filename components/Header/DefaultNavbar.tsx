@@ -37,7 +37,7 @@ export const DefaultNavbar: React.FC<DefaultNavbarProps> = () => {
           </div>
           {isLoggedIn && (
             <div className="hidden md:flex items-center space-x-1">
-              <Link href="/posts" passHref><a className="py-2 px-3 border-2 border-green-600 bg-green-600 text-white hover:bg-green-50 hover:text-green-600 rounded-full transform duration-500">出品する</a></Link>
+              <Link href="/posts/new" passHref><a className="py-2 px-3 border-2 border-green-600 bg-green-600 text-white hover:bg-green-50 hover:text-green-600 rounded-full transform duration-500">出品する</a></Link>
               <button className="py-5 px-3" onClick={logout}>ログアウト</button>
             </div>
           )}
@@ -54,7 +54,7 @@ export const DefaultNavbar: React.FC<DefaultNavbarProps> = () => {
         <div className="md:hidden">
           {isLoggedIn && (
             <>
-              <Link href="/posts" passHref>
+              <Link href="/posts/new" passHref>
                 <a className="flex justify-between py-5 px-3">出品する<ChevronRightIcon className="h-6 w-6" /></a>
               </Link>
               <span className="flex justify-between py-5 px-3" onClick={logout}>
