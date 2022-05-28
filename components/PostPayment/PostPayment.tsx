@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   PaymentElement,
   useElements,
@@ -6,9 +6,13 @@ import {
 } from '@stripe/react-stripe-js';
 import { StripeError } from '@stripe/stripe-js';
 import { Post } from '../../types/common';
-import { PAYMENT_COMPLETE_API_ENDPOINT } from '../../utils/constants';
-import { SpinIcon } from '../Common/SpinIcon';
 import { currencyFormat } from '../../utils/common';
+import {
+  PAYMENT_COMPLETE_API_ENDPOINT,
+  PAYMENT_INTENT_API_ENDPOINT,
+} from '../../utils/constants';
+import { DefaultDatePicker } from '../Common/DefaultDatePicker';
+import { SpinIcon } from '../Common/SpinIcon';
 
 const getErrorMessage = (error: StripeError): string | null => {
   if (!error) {
@@ -29,9 +33,12 @@ export const PostPayment: React.FC<{ post: Post; clientSecret: string }> = ({
 }) => {
   const stripe = useStripe();
   const elements = useElements();
+  const messageRef = useRef<HTMLTextAreaElement>(null);
   const [formError, setFormError] = useState<string | null | undefined>(null);
   const [formLoading, setFormLoading] = useState<boolean>(false);
   const [total, setTotal] = useState<number | null | undefined>(null);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
 
   useEffect(() => {
     if (!stripe || !clientSecret) {
@@ -54,6 +61,29 @@ export const PostPayment: React.FC<{ post: Post; clientSecret: string }> = ({
       return;
     }
 
+    // Update payment intent with any information that was not
+    // loaded inside the intent on page load.
+    const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret);
+    const options = {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        startDate,
+        endDate,
+        message: messageRef.current?.value,
+      }),
+    };
+    const response = await fetch(
+      `${PAYMENT_INTENT_API_ENDPOINT}/${paymentIntent?.id}`,
+      options
+    );
+    if (response.status >= 300) {
+      return;
+    }
+
+    // Call stripe payment complete api.
+    // We will make backend call to update our db
+    // after successful redirect to return_url.
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
@@ -76,15 +106,40 @@ export const PostPayment: React.FC<{ post: Post; clientSecret: string }> = ({
             {total ? <span>{currencyFormat(total)}円</span> : <SpinIcon />}
           </div>
         </div>
+        <div className="flex w-96">
+          <div className="flex flex-col w-1/2">
+            <span className="py-4">受取日</span>
+            <DefaultDatePicker
+              onChange={(date: Date) => setStartDate(date)}
+              selected={startDate}
+              startDate={startDate}
+              endDate={endDate}
+              minDate={new Date()}
+              selectsStart
+            />
+          </div>
+          <div className="flex flex-col w-1/2">
+            <span className="py-4">返却日</span>
+            <DefaultDatePicker
+              onChange={(date: Date) => setEndDate(date)}
+              selected={endDate}
+              startDate={startDate}
+              endDate={endDate}
+              minDate={startDate}
+              selectsEnd
+            />
+          </div>
+        </div>
         <div className="flex flex-col w-96">
-          <div className="p-4">投稿者にメッセージ:</div>
+          <div className="py-4">投稿者にメッセージ</div>
           <textarea
-            rows={5}
             className="p-4 rounded-md shadow-md focus:outline-none border border-gray-100"
+            rows={5}
+            ref={messageRef}
           />
         </div>
         <div className="flex flex-col w-96">
-          <div className="p-4">お支払い方法</div>
+          <div className="py-4">お支払い方法</div>
           {formError && (
             <div className="text-red-500 p-4 text-center">{formError}</div>
           )}

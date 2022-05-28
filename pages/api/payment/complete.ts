@@ -54,10 +54,11 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
       userId: paymentIntent.customer ?? 'dde6cdb0-23d1-4657-a60d-2d04d4d6530c',
       paymentId: paymentIntent.id,
       status: status,
-      // TODO: replace with real message
-      message: 'Test Message',
       quantity: parseInt(paymentIntent.metadata.quantity),
       total: paymentIntent.amount,
+      message: paymentIntent.metadata.message,
+      startDate: paymentIntent.metadata.startDate,
+      endDate: paymentIntent.metadata.endDate,
     }),
   };
   const response = await fetch(

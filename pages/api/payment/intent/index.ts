@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
-import { PaymentIntentItem } from '../../../types/common';
-import { DEFAULT_CURRENCY } from '../../../utils/backend/constants';
-import { methodNotAllowed } from '../../../utils/backend/http';
-import { MAX_QUANTITY } from '../../../utils/constants';
+import { PaymentIntentItem } from '../../../../types/common';
+import { DEFAULT_CURRENCY } from '../../../../utils/backend/constants';
+import { methodNotAllowed } from '../../../../utils/backend/http';
+import { MAX_QUANTITY } from '../../../../utils/constants';
 
 const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY ?? '', {
   // @ts-ignore
