@@ -8,13 +8,15 @@ export enum Action {
   SET_POSTS_PARAMS = 'SET_POSTS_PARAMS',
 }
 
-export type IAction = {
-  type: Action.SET_POSTS;
-  payload: Array<Post>;
-} | {
-  type: Action.SET_POSTS_PARAMS;
-  payload: PostsParams;
-}
+export type IAction =
+  | {
+      type: Action.SET_POSTS;
+      payload: Array<Post>;
+    }
+  | {
+      type: Action.SET_POSTS_PARAMS;
+      payload: PostsParams;
+    };
 
 export interface PostsState {
   posts: Array<Post>;
@@ -24,6 +26,11 @@ export interface PostsState {
 export interface PostsContextValue {
   state: PostsState;
   dispatch: React.Dispatch<IAction>;
+}
+
+export interface SortItem {
+  label: string;
+  sort: (a: Post, b: Post) => number;
 }
 
 // Use generic function type to avoid using () => any
@@ -42,7 +49,7 @@ const reducer = (state: PostsState, action: IAction) => {
       // Change IAction.payload to any if you want to enable error throwing
       return state;
   }
-}
+};
 
 const initialData = {
   posts: [],
@@ -69,7 +76,7 @@ export const PostsProvider: React.FC = ({ children }) => {
       {children}
     </PostsContext.Provider>
   );
-}
+};
 
 // Can't create generic arrow function in tsx
 // so we use standard syntax
