@@ -130,7 +130,6 @@ export interface Order {
   userId: string;
   paymentId: string;
   status: string;
-  message: string;
   quantity: number;
   total: number;
   createdAt: Date;

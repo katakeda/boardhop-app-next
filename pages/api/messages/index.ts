@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { Message, ResponseData } from '../../../types/common';
 import { methodNotAllowed } from '../../../utils/backend/http';
 
-type PostData = {
+type MessageData = {
   message: Message | null;
 } & ResponseData;
 
@@ -20,7 +20,7 @@ const handler = async (
 
 const handlePost = async (
   req: NextApiRequest,
-  res: NextApiResponse<PostData>
+  res: NextApiResponse<MessageData>
 ) => {
   const options = {
     method: 'POST',
