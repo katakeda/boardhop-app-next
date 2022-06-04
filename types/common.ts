@@ -71,11 +71,10 @@ export interface User {
 }
 
 export interface PaginateParams {
-  page: string;
+  page: string | number;
 }
 
 export interface PostsParams extends PaginateParams {
-  type: string;
   categories?: Set<string>;
   skillLevels?: Set<string>;
   brands?: Set<string>;

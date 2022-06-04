@@ -5,6 +5,7 @@ import { Post } from '../../types/common';
 import { DropdownMenu } from '../Common/DropdownMenu';
 import { FilterMenu } from './FilterMenu';
 import { Posts } from './Posts';
+import { PostsPagination } from './PostsPagination';
 
 const sortItems: Array<SortItem> = [
   {
@@ -47,6 +48,8 @@ export const PostsSearch: React.FC = () => {
         {filterMenu && <FilterMenu />}
 
         <Posts sortItem={sortItem} />
+
+        <PostsPagination />
       </div>
     </div>
   );

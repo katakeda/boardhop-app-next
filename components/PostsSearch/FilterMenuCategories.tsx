@@ -6,7 +6,7 @@ import { CategoryTree } from '../../types/common';
 const MockRootCategory: CategoryTree = {
   id: '1',
   label: '全てのカテゴリー',
-  value: 'root',
+  value: 'all',
   children: [
     {
       id: '2', label: 'サーフボード', value: 'surfboard', children: [
@@ -52,8 +52,8 @@ interface FilterMenuCategoriesProps { }
 
 export const FilterMenuCategories: React.FC<FilterMenuCategoriesProps> = () => {
   return (
-    <div className="divide-y-2 divide-gray-300 w-full">
-      <p>カテゴリー</p>
+    <div className="divide-y divide-gray-300 w-full">
+      <p className='font-sans text-gray-500'>カテゴリー</p>
       <div>
         <FilterMenuCategoryTree category={MockRootCategory} depth={0} />
       </div>

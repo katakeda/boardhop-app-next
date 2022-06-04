@@ -16,8 +16,8 @@ interface FilterMenuTagsProps {
 
 export const FilterMenuTags: React.FC<FilterMenuTagsProps> = ({ label, name, tags, params, handler }) => {
   return (
-    <div className="divide-y-2 divide-gray-300 w-full">
-      <p>{label}</p>
+    <div className="divide-y divide-gray-300 w-full">
+      <p className='font-sans text-gray-500'>{label}</p>
       <div>
         {tags.map((tag: Tag) => (
           <div key={tag.id}>

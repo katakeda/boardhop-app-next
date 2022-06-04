@@ -54,7 +54,6 @@ const reducer = (state: PostsState, action: IAction) => {
 const initialData = {
   posts: [],
   postsParams: {
-    type: '',
     categories: new Set<string>(),
     skillLevels: new Set<string>(),
     brands: new Set<string>(),
@@ -66,7 +65,7 @@ export const PostsProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     (async () => {
-      const { posts } = await getPosts({} as PostsParams);
+      const { posts } = await getPosts(state.postsParams);
       dispatch({ type: Action.SET_POSTS, payload: posts });
     })();
   }, [state.postsParams]);

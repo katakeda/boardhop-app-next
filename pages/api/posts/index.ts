@@ -27,6 +27,9 @@ const handleGet = async (
   res: NextApiResponse<GetData>
 ) => {
   let queryArr: Array<string> = [];
+  if (req.query.p) {
+    queryArr.push(`p=${req.query.p}`);
+  }
   if (req.query.tags) {
     queryArr.push(`tags=${req.query.tags}`);
   }

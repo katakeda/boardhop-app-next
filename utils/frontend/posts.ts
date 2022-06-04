@@ -16,9 +16,6 @@ export const getPosts = async (
   if (Number(postsParams.page) > 0) {
     queryArr.push(`p=${postsParams.page}`);
   }
-  if (postsParams.type !== '') {
-    queryArr.push(`type=${postsParams.type}`);
-  }
   if (postsParams.categories && postsParams.categories.size > 0) {
     queryArr.push(`cats=${Array.from(postsParams.categories).join(',')}`);
   }
