@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { MediaType, Post, PostMedia, Tag } from '../../types/common';
 import { currencyFormat } from '../../utils/common';
-import { MAX_QUANTITY, RateMap } from '../../utils/constants';
+import { CDN_URL, MAX_QUANTITY, RateMap } from '../../utils/constants';
 import mapboxgl, {
   DEFAULT_STYLE,
   DETAILED_ZOOM,
@@ -90,9 +90,8 @@ export const PostDetail: React.FC = () => {
               className="relative flex snap-center w-full flex-shrink-0 bg-black"
               key={image.id}
             >
-              {/* TODO: Either construct the src beforehand or use constants */}
               <Image
-                src={`https://firebasestorage.googleapis.com/v0/b/boardhop-dev.appspot.com/o/${image.url}?alt=media`}
+                src={`${CDN_URL}/${image.url}?alt=media`}
                 alt={image.id}
                 layout="fill"
                 objectFit="cover"

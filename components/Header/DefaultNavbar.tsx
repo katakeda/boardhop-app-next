@@ -1,7 +1,8 @@
+import React, { useState } from 'react';
 import { ChevronRightIcon, MenuIcon } from '@heroicons/react/outline';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
 import { Action, useAuthContext } from '../../contexts/AuthContext';
 import { logout as logoutRequest } from '../../utils/user';
 
@@ -32,8 +33,16 @@ export const DefaultNavbar: React.FC<DefaultNavbarProps> = () => {
             </button>
           </div>
           <div className="md:flex md:space-x-4">
-            {/* TODO: Add Boardhop logo */}
-            <Link href="/"><a className="py-5 px-3">Boardhop</a></Link>
+            <Link href="/" passHref>
+              <a className="relative flex py-5 px-3 w-60">
+                <Image
+                  src={'/img/logo.png'}
+                  alt={'logo'}
+                  layout="fill"
+                  objectFit="cover"
+                />
+              </a>
+            </Link>
           </div>
           {isLoggedIn && (
             <div className="hidden md:flex items-center space-x-1">

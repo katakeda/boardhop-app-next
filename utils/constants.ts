@@ -18,8 +18,7 @@ export const USER_LOGOUT_API_ENDPOINT = API_ENDPOINT + '/user/logout';
 export const PAYMENT_INTENT_API_ENDPOINT = API_ENDPOINT + '/payment/intent';
 export const PAYMENT_COMPLETE_API_ENDPOINT = API_ENDPOINT + '/payment/complete';
 export const ORDERS_API_ENDPOINT = API_ENDPOINT + '/orders';
-export const CDN_URL = 'http://localhost:3000';
-export const DEFAULT_POST_IMAGE_LINK = CDN_URL + '/img/sample-surfboard.jpg';
+export const CDN_URL = process.env.NEXT_PUBLIC_CDN_URL;
 
 export const MAPBOX_ACCESS_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
 

@@ -7,7 +7,7 @@ import {
   Rate,
   User,
 } from '../../types/common';
-import { DEFAULT_POST_IMAGE_LINK, POSTS_API_ENDPOINT } from '../constants';
+import { POSTS_API_ENDPOINT } from '../constants';
 
 export const getPosts = async (
   postsParams: PostsParams
@@ -143,7 +143,7 @@ export const generateMockPost = (): Post => {
   };
   const pickupLocation: PickupLocation = { latitude: 33, longitude: -118 };
   const medias: Array<PostMedia> = [
-    { id: '1', url: DEFAULT_POST_IMAGE_LINK, type: MediaType.IMAGE },
+    { id: '1', url: '/img/sample-surfboard.jpg', type: MediaType.IMAGE },
   ];
 
   return {

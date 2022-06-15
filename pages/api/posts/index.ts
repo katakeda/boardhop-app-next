@@ -66,6 +66,7 @@ const handlePost = async (
       'Accept-Encoding': req.headers['accept-encoding'],
       'Cache-Control': req.headers['cache-control'],
       'Content-Type': req.headers['content-type'],
+      Authorization: `Bearer ${req.cookies.boardhop_auth}`,
     },
     body: req.body,
   };

@@ -20,9 +20,6 @@ import { DropdownMenu } from '../Common/DropdownMenu';
 import { PostNewDetailSnowboard } from './PostNewDetailSnowboard';
 import { PostNewDetailSurfboard } from './PostNewDetailSurfboard';
 
-// TODO: Fetch this value from auth
-const USER_ID = 'dde6cdb0-23d1-4657-a60d-2d04d4d6530c';
-
 const MAX_IMAGES_LENGTH = 8;
 
 interface PostNewDetailProps {
@@ -159,7 +156,6 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
 
     try {
       const data = {
-        userId: USER_ID,
         title: values.title ?? '',
         description: values.description ?? '',
         price: values.price ?? 0,
@@ -170,9 +166,15 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
 
       const payload = new FormData();
       payload.append('data', JSON.stringify(data));
-      payload.append('tag_ids', skillValue?.id);
-      payload.append('tag_ids', brandValue?.id);
-      payload.append('category_ids', postCategory?.id);
+      if (skillValue && skillValue.id) {
+        payload.append('tag_ids', skillValue.id);
+      }
+      if (brandValue && brandValue.id) {
+        payload.append('tag_ids', brandValue.id);
+      }
+      if (postCategory && postCategory.id) {
+        payload.append('category_ids', postCategory.id);
+      }
       images.forEach((image) => {
         payload.append('images', image.file, image.file.name);
       });

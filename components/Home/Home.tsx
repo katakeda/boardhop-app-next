@@ -11,7 +11,7 @@ export const Home: React.FC<HomeProps> = () => {
         <Link href="/posts?type=surfboards" passHref>
           <span className="flex justify-center items-center relative">
             <p className="flex justify-center items-center absolute inset-0 text-3xl text-gray-100 z-10">
-              Surfboards
+              サーフボード
             </p>
             <Image
               className="rounded-3xl"
@@ -24,8 +24,8 @@ export const Home: React.FC<HomeProps> = () => {
         </Link>
         <Link href="/posts?type=snowboards" passHref>
           <span className="flex justify-center items-center relative">
-            <p className="flex justify-center items-center absolute inset-0 text-3xl text-gray-100 z-10">
-              Snowboards
+            <p className="flex justify-center items-center absolute inset-0 text-3xl text-gray-900 z-10">
+              スノーボード
             </p>
             <Image
               className="rounded-xl w-full"
