@@ -1,35 +1,25 @@
-import React, { BaseSyntheticEvent } from 'react';
+import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { Action, usePostsContext } from '../../contexts/PostsContext';
+import { Tag } from '../../types/common';
+import { getTags } from '../../utils/frontend/tags';
 import { FilterMenuCategories } from './FilterMenuCategories';
 import { FilterMenuTags } from './FilterMenuTags';
-
-interface Tag {
-  id: string;
-  label: string;
-  value: string;
-}
-
-interface SkillLevel extends Tag {}
-
-interface Brand extends Tag {}
-
-// TODO: Replace with actual data
-const MockSkillLevels: Array<SkillLevel> = [
-  { id: '1', label: '初心者', value: 'beginner' },
-  { id: '2', label: '中級者', value: 'intermediate' },
-  { id: '3', label: '上級者', value: 'advanced' },
-];
-
-// TODO: Replace with actual data
-const MockBrands: Array<Brand> = [
-  { id: '1', label: 'JS', value: 'js' },
-  { id: '2', label: 'Mayhem', value: 'mayhem' },
-  { id: '3', label: 'Burton', value: 'burton' },
-];
 
 export const FilterMenu: React.FC = () => {
   const postsParams = usePostsContext((value) => value.state.postsParams);
   const dispatch = usePostsContext((value) => value.dispatch);
+  const [tags, setTags] = useState<Array<Tag>>([]);
+
+  useEffect(() => {
+    (async () => {
+      const { tags, error } = await getTags({
+        type: ['surfboard', 'snowboard'].join(','),
+      });
+      if (!error && tags) {
+        setTags(tags);
+      }
+    })();
+  }, []);
 
   const handleSkillLevelChange = (event: BaseSyntheticEvent) => {
     handleTagChange(event, postsParams.skillLevels);
@@ -58,14 +48,14 @@ export const FilterMenu: React.FC = () => {
       <FilterMenuTags
         label="スキルレベル"
         name="skill_level"
-        tags={MockSkillLevels}
+        tags={tags.filter((tag) => tag.type == 'Skill Level')}
         params={postsParams.skillLevels}
         handler={handleSkillLevelChange}
       />
       <FilterMenuTags
         label="ブランド"
         name="brand"
-        tags={MockBrands}
+        tags={tags.filter((tag) => ['Surfboard Brand', 'Snowboard Brand'].includes(tag.type))}
         params={postsParams.brands}
         handler={handleBrandChange}
       />
