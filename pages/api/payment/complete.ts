@@ -47,11 +47,10 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${req.cookies.boardhop_auth}`,
     },
     body: JSON.stringify({
       postId: paymentIntent.metadata.postId,
-      // TODO: replace with customer
-      userId: paymentIntent.customer ?? 'dde6cdb0-23d1-4657-a60d-2d04d4d6530c',
       paymentId: paymentIntent.id,
       status: status,
       quantity: parseInt(paymentIntent.metadata.quantity),

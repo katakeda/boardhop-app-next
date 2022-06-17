@@ -10,7 +10,10 @@ import type {
   PaymentIntentItem,
   Post,
 } from '../../../../types/common';
-import { MAX_QUANTITY, PAYMENT_INTENT_API_ENDPOINT } from '../../../../utils/constants';
+import {
+  MAX_QUANTITY,
+  PAYMENT_INTENT_API_ENDPOINT,
+} from '../../../../utils/constants';
 import { getPost } from '../../../../utils/frontend/posts';
 
 const stripePromise = loadStripe(

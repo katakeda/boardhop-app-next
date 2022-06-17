@@ -3,7 +3,6 @@ import { NextRequest } from "next/server";
 import { User } from "../types/common";
 import { USER_API_ENDPOINT, USER_LOGIN_API_ENDPOINT, USER_LOGOUT_API_ENDPOINT, USER_SIGNUP_API_ENDPOINT } from "./constants";
 
-// TODO: This may be shared type
 type UserResponse = {
   isLoading: boolean;
   isError: boolean;

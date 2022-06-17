@@ -24,7 +24,10 @@ const handlePost = async (
 ) => {
   const options = {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${req.cookies.boardhop_auth}`,
+    },
     body: JSON.stringify(req.body),
   };
 
