@@ -9,6 +9,13 @@ export const getOrders = async (): Promise<{
     const options = { method: 'GET' };
     const response = await fetch(ORDERS_API_ENDPOINT, options);
 
+    if (response.status == 404) {
+      return {
+        orders: [],
+        error: null,
+      };
+    }
+
     if (response.status >= 300) {
       return {
         orders: null,
