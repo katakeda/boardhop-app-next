@@ -1,9 +1,7 @@
 import React from 'react';
 import { DefaultNavbar } from './DefaultNavbar';
 
-interface DefaultHeaderProps {}
-
-export const DefaultHeader: React.FC<DefaultHeaderProps> = () => {
+export const DefaultHeader: React.FC = () => {
   return (
     <div className="bg-white">
       <DefaultNavbar />

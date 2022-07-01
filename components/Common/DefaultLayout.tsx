@@ -4,9 +4,7 @@ import { AuthProvider } from '../../contexts/AuthContext';
 import { DefaultFooter } from '../Footer/DefaultFooter';
 import { DefaultHeader } from '../Header/DefaultHeader';
 
-interface DefaultLayoutProps {}
-
-export const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
+export const DefaultLayout: React.FC = ({ children }) => {
   return (
     <AppProvider>
       <AuthProvider>
