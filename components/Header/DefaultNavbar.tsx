@@ -75,6 +75,12 @@ export const DefaultNavbar: React.FC = () => {
         <div className="md:hidden">
           {isLoggedIn && (
             <>
+              <Link href="/user/dashboard" passHref>
+                <a className='flex justify-between py-5 px-3'>
+                  ダッシュボード
+                  <ChevronRightIcon className="h-6 w-6" />
+                </a>
+              </Link>
               <Link href="/posts/new" passHref>
                 <a className="flex justify-between py-5 px-3">
                   出品する
