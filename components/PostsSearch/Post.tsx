@@ -2,12 +2,14 @@ import React from 'react';
 import { PhotographIcon } from '@heroicons/react/outline';
 import UserIcon from '@heroicons/react/outline/UserIcon';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { MediaType, Post as PostType } from '../../types/common';
 import { RateMap } from '../../utils/constants';
 
 export const Post: React.FC<{
   post: PostType;
 }> = ({ post }) => {
+  const router = useRouter();
   let topImageUrl;
   if (post.medias && post.medias.length > 0) {
     const [topImage] = post.medias.filter(
@@ -20,6 +22,12 @@ export const Post: React.FC<{
     <div
       key={post.id}
       className="flex flex-col bg-white shadow-lg rounded-lg divide-y-2 w-full h-64"
+      onClick={() => {
+        router.push({
+          pathname: `/posts/[postId]`,
+          query: { postId: post.id },
+        });
+      }}
     >
       <div className="relative w-full h-3/4">
         {!topImageUrl && (
