@@ -186,7 +186,7 @@ export const PostDetail: React.FC = () => {
             )}
           </span>
           <span className="font-sans text-md text-gray-500 font-semibold">
-            Test Test
+            {post.user.firstName} {post.user.lastName}
           </span>
         </div>
         <div ref={mapRef} className="py-4 w-full h-64"></div>
