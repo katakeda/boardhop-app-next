@@ -16,6 +16,7 @@ import mapboxgl, {
 } from '../../utils/frontend/mapbox';
 import { getPost } from '../../utils/frontend/posts';
 import { DefaultLoading } from '../Common/DefaultLoading';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const PostDetailTags: React.FC<{
   label: string;
@@ -35,6 +36,7 @@ const PostDetailTags: React.FC<{
 
 export const PostDetail: React.FC = () => {
   const router = useRouter();
+  const user = useAuthContext((value) => value.state.user);
   const mapRef = useRef<HTMLDivElement>(null);
   const quantRef = useRef<HTMLInputElement>(null);
   const [post, setPost] = useState<Post | null>(null);
@@ -74,6 +76,8 @@ export const PostDetail: React.FC = () => {
   const images = post.medias
     ? post.medias.filter((media: PostMedia) => media.type === MediaType.IMAGE)
     : [];
+
+  const isEditable = user && user.id == post.user.id;
 
   return (
     <div className="flex flex-col items-center bg-gray-100 h-full">
@@ -139,6 +143,21 @@ export const PostDetail: React.FC = () => {
             >
               レンタルする
             </button>
+            {isEditable && (
+              <button
+                className="w-full my-2 p-2 rounded-md shadow-sm text-white bg-gray-900"
+                onClick={() => {
+                  router.push({
+                    pathname: `/posts/[postId]/edit`,
+                    query: {
+                      postId: post.id,
+                    },
+                  });
+                }}
+              >
+                編集する
+              </button>
+            )}
           </div>
         </div>
         <div className="py-4 space-y-4">

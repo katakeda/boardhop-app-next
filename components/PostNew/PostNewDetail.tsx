@@ -9,6 +9,7 @@ import { getCategories } from '../../utils/frontend/categories';
 import { RateMap } from '../../utils/constants';
 import mapboxgl, {
   DEFAULT_CENTER,
+  DEFAULT_GLGEOCODER_CONFIG,
   DEFAULT_STYLE,
   DEFAULT_ZOOM,
   MapboxGlGeocoder,
@@ -17,8 +18,8 @@ import { submitPost } from '../../utils/frontend/posts';
 import { DefaultError } from '../Common/DefaultError';
 import { DefaultLoading } from '../Common/DefaultLoading';
 import { DropdownMenu } from '../Common/DropdownMenu';
-import { PostNewDetailSnowboard } from './PostNewDetailSnowboard';
-import { PostNewDetailSurfboard } from './PostNewDetailSurfboard';
+import { PostSurfboardAttributes } from '../Common/PostSurfboardAttributes';
+import { PostSnowboardAttributes } from '../Common/PostSnowboardAttributes';
 
 const MAX_IMAGES_LENGTH = 8;
 
@@ -81,26 +82,15 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
         zoom: DEFAULT_ZOOM,
       });
 
-      map.addControl(
-        new MapboxGlGeocoder({
-          accessToken: mapboxgl.accessToken,
-          // @ts-ignore types/mapbox__mapbox-gl-geocoder is not up to date
-          mapboxgl: mapboxgl,
-          marker: true,
-          flyTo: { screenSpeed: 5 },
-          placeholder: '検索',
-          // @ts-ignore types/mapbox__mapbox-gl-geocoder is not up to date
-          proximity: 'ip',
-          collapsed: true,
-          countries: 'jp',
-          language: 'ja',
-        }).on('result', ({ result }: { result: Result }) => {
+      // @ts-ignore types/mapbox__mapbox-gl-geocoder is not up to date
+      new MapboxGlGeocoder(DEFAULT_GLGEOCODER_CONFIG)
+        .on('result', ({ result }: { result: Result }) => {
           setPickupLocation({
             latitude: result.center[1],
             longitude: result.center[0],
           });
         })
-      );
+        .addTo(map);
     }
   }, []);
 
@@ -195,10 +185,10 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
   let PostNewDetailInner;
   switch (rootCategory) {
     case 'surfboard':
-      PostNewDetailInner = PostNewDetailSurfboard;
+      PostNewDetailInner = PostSurfboardAttributes;
       break;
     case 'snowboard':
-      PostNewDetailInner = PostNewDetailSnowboard;
+      PostNewDetailInner = PostSnowboardAttributes;
       break;
     default:
       PostNewDetailInner = DefaultError;
@@ -361,7 +351,7 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
               className="w-full p-2 rounded-md shadow-sm text-white bg-primary-500"
               disabled={loading}
             >
-              送信
+              保存する
             </button>
           </div>
         </Form>

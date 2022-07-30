@@ -132,6 +132,39 @@ export const submitPost = async (
   }
 };
 
+export const updatePost = async (
+  id: string | Array<string> | undefined,
+  payload: FormData
+): Promise<{ post: Post | null; error: any }> => {
+  const options = {
+    method: 'PATCH',
+    body: payload,
+  };
+
+  try {
+    const response = await fetch(`${POSTS_API_ENDPOINT}/${id}`, options);
+
+    if (response.status >= 300) {
+      return {
+        post: null,
+        error: response.statusText,
+      };
+    }
+
+    const data = await response.json();
+
+    return {
+      post: data.post,
+      error: data.post ? null : 'Failed to update post',
+    };
+  } catch (error) {
+    return {
+      post: null,
+      error,
+    };
+  }
+};
+
 export const generateMockPost = (): Post => {
   const id = Math.round(Math.random() * 100).toString();
   const user = {
@@ -175,6 +208,9 @@ export const convertResponseDataToPost = (data: any): Post => {
         url: media.mediaUrl,
         type: media.type,
       }));
+  const categories: Array<string> = !data.categories
+    ? []
+    : data.categories.split(',');
 
   return {
     id: data.id,
@@ -188,6 +224,7 @@ export const convertResponseDataToPost = (data: any): Post => {
     },
     medias: medias,
     tags: data.tags,
+    categories: categories,
     createdAt: data.createdAt,
     user,
   };

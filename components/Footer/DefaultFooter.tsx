@@ -1,13 +1,9 @@
 import React from 'react';
 
-interface DefaultFooterProps {
-
-}
-
-export const DefaultFooter: React.FC<DefaultFooterProps> = () => {
+export const DefaultFooter: React.FC = () => {
   return (
-    <div className="text-center text-gray-500">
-      <p>Footer</p>
+    <div className="flex items-center justify-center h-footer text-center text-sm text-gray-400">
+      <p>Copyright © {(new Date()).getFullYear()} Boardhop</p>
     </div>
   );
 }

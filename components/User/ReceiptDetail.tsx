@@ -82,7 +82,7 @@ export const ReceiptDetail: React.FC = () => {
           className="inline-flex items-center justify-center w-full p-2 mt-3 rounded-md shadow-sm text-white bg-primary-500 disabled:opacity-50"
           onClick={handleMessageSubmit}
         >
-          送信
+          送信する
         </button>
         {order.messages && order.messages.sort(sortByNewest).map((msgObj) => (
           <div

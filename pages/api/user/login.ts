@@ -25,7 +25,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
   const { user } = userCredential;
 
-  // FIXME: Not good practice to store JWT token in cookie
   const idToken = await user.getIdToken();
   setApiCookie(res, 'boardhop_auth', idToken);
 

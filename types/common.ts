@@ -45,6 +45,7 @@ export interface Post {
   pickupLocation: PickupLocation;
   medias?: Array<PostMedia>;
   tags?: Array<Tag>;
+  categories?: Array<string>;
   createdAt: Date;
 }
 

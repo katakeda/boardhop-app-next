@@ -3,14 +3,14 @@ import { Tag } from '../../types/common';
 import { getTags } from '../../utils/frontend/tags';
 import { DropdownMenu } from '../Common/DropdownMenu';
 
-interface PostNewDetailSurfboardProps {
+interface PostSurfboardAttributesProps {
   skillValue: Tag;
   brandValue: Tag;
   setSkillValue: (value: Tag) => void;
   setBrandValue: (value: Tag) => void;
 }
 
-export const PostNewDetailSurfboard: React.FC<PostNewDetailSurfboardProps> = ({
+export const PostSurfboardAttributes: React.FC<PostSurfboardAttributesProps> = ({
   skillValue,
   brandValue,
   setSkillValue,
