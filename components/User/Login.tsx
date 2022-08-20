@@ -27,7 +27,6 @@ export const Login: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [formError, setFormError] = useState<Error | any | unknown>(null);
 
-  // TODO: Validator needs to check for email format, password length, etc
   const validator = (values: FormValues) => {
     const errors: FormErrors = {};
     if (!values.email) {

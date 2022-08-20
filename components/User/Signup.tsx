@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { validate } from 'email-validator';
 import { Action, useAuthContext } from '../../contexts/AuthContext';
 import { signup } from '../../utils/user';
 import { Wrapper } from './Wrapper';
-
-interface SignupProps {}
 
 interface FormValues {
   firstName: string;
@@ -29,13 +28,14 @@ const initialValues: FormValues = {
   password: '',
 };
 
-export const Signup: React.FC<SignupProps> = () => {
+export const MIN_PASSWORD_LENGTH = 8;
+
+export const Signup: React.FC = () => {
   const router = useRouter();
   const dispatch = useAuthContext((value) => value.dispatch);
   const [loading, setLoading] = useState<boolean>(false);
   const [formError, setFormError] = useState<Error | any | unknown>(null);
 
-  // TODO: Validator needs to check for email format, password length, etc
   const validator = (values: FormValues) => {
     const errors: FormErrors = {};
     if (!values.firstName) {
@@ -44,8 +44,26 @@ export const Signup: React.FC<SignupProps> = () => {
     if (!values.lastName) {
       errors.lastName = '必須';
     }
+    if (!validate(values.email)) {
+      errors.email = 'Eメールのフォーマットをご確認ください';
+    }
     if (!values.email) {
       errors.email = '必須';
+    }
+    if (!RegExp(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/).test(values.password)) {
+      errors.password = 'パスワードに記号が含まれてません';
+    }
+    if (!RegExp(/[a-z]/).test(values.password)) {
+      errors.password = 'パスワードに小文字が含まれてません';
+    }
+    if (!RegExp(/[A-Z]/).test(values.password)) {
+      errors.password = 'パスワードに大文字が含まれてません';
+    }
+    if (!RegExp(/[0-9]/).test(values.password)) {
+      errors.password = 'パスワードに数字が含まれてません';
+    }
+    if (values.password.length < MIN_PASSWORD_LENGTH) {
+      errors.password = 'パスワードが８文字以下です';
     }
     if (!values.password) {
       errors.password = '必須';

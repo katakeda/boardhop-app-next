@@ -17,6 +17,7 @@
     "@stripe/react-stripe-js": "^1.8.0",
     "@stripe/stripe-js": "^1.29.0",
     "cookie": "^0.4.2",
+    "email-validator": "^2.0.4",
     "firebase": "^9.6.5",
     "formik": "^2.2.9",
     "mapbox-gl": "^2.8.2",
