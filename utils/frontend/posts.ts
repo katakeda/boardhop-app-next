@@ -100,12 +100,13 @@ export const getPost = async (
   }
 };
 
-export const submitPost = async (
-  payload: FormData
+export const createPost = async (
+  payload: any
 ): Promise<{ post: Post | null; error: any }> => {
   const options = {
     method: 'POST',
-    body: payload,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
   };
 
   try {
@@ -134,11 +135,12 @@ export const submitPost = async (
 
 export const updatePost = async (
   id: string | Array<string> | undefined,
-  payload: FormData
+  payload: any
 ): Promise<{ post: Post | null; error: any }> => {
   const options = {
     method: 'PATCH',
-    body: payload,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
   };
 
   try {

@@ -14,7 +14,8 @@ import mapboxgl, {
   DEFAULT_ZOOM,
   MapboxGlGeocoder,
 } from '../../utils/frontend/mapbox';
-import { submitPost } from '../../utils/frontend/posts';
+import { createPost, updatePost } from '../../utils/frontend/posts';
+import { uploadFile } from '../../utils/frontend/firebase';
 import { DefaultError } from '../Common/DefaultError';
 import { DefaultLoading } from '../Common/DefaultLoading';
 import { DropdownMenu } from '../Common/DropdownMenu';
@@ -145,35 +146,64 @@ export const PostNewDetail: React.FC<PostNewDetailProps> = ({
     setLoading(true);
 
     try {
-      const data = {
-        title: values.title ?? '',
-        description: values.description ?? '',
-        price: values.price ?? 0,
-        rate: values.rate ?? Rate.DAY,
-        pickupLatitude: pickupLocation?.latitude,
-        pickupLongitude: pickupLocation?.longitude,
+      const payload: {
+        data: any;
+        relationships: { tagIds: Array<string>; categoryIds: Array<string> };
+      } = {
+        data: {
+          title: values.title ?? '',
+          description: values.description ?? '',
+          price: values.price ?? 0,
+          rate: values.rate ?? Rate.DAY,
+          pickupLatitude: pickupLocation?.latitude,
+          pickupLongitude: pickupLocation?.longitude,
+        },
+        relationships: {
+          tagIds: [],
+          categoryIds: [],
+        },
       };
-
-      const payload = new FormData();
-      payload.append('data', JSON.stringify(data));
       if (skillValue && skillValue.id) {
-        payload.append('tag_ids', skillValue.id);
+        payload.relationships.tagIds.push(skillValue.id.toString());
       }
       if (brandValue && brandValue.id) {
-        payload.append('tag_ids', brandValue.id);
+        payload.relationships.tagIds.push(brandValue.id.toString());
       }
       if (postCategory && postCategory.id) {
-        payload.append('category_ids', postCategory.id);
+        payload.relationships.categoryIds.push(postCategory.id.toString());
       }
-      images.forEach((image) => {
-        payload.append('images', image.file, image.file.name);
-      });
 
-      const { post, error } = await submitPost(payload);
+      const { post, error } = await createPost(payload);
       if (error || !post) {
         setFormError(error);
       } else {
-        router.push(`/posts/${post.id}`);
+        let updateError = null;
+        const fileNames: Array<string> = [];
+        for (const index in images) {
+          const fileName = `${post.id}_${index}`;
+          await uploadFile(images[index].file, fileName);
+          fileNames.push(fileName);
+        }
+        if (fileNames.length > 0) {
+          const updatePayload = {
+            data: payload.data,
+            relationships: {
+              medias: fileNames.map((fileName) => ({
+                mediaUrl: fileName,
+                type: 'image',
+              })),
+            },
+          };
+          const { error } = await updatePost(post.id, updatePayload);
+          if (error) {
+            updateError = error;
+          }
+        }
+        if (updateError) {
+          setFormError(updateError);
+        } else {
+          router.push(`/posts/${post.id}`);
+        }
       }
     } catch (error) {
       setFormError(error);

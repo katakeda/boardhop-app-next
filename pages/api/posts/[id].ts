@@ -52,7 +52,7 @@ const handlePatch = async (
       'Content-Type': req.headers['content-type'],
       Authorization: `Bearer ${req.cookies.boardhop_auth}`,
     },
-    body: req.body,
+    body: JSON.stringify(req.body),
   };
 
   const response = await fetch(
