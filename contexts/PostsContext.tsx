@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { PropsWithChildren, useEffect, useReducer } from 'react';
 import { createContext, useContextSelector } from 'use-context-selector';
 import { Post, PostsParams } from '../types/common';
 import { getPosts } from '../utils/frontend/posts';
@@ -60,7 +60,9 @@ const initialData = {
   } as PostsParams,
 };
 
-export const PostsProvider: React.FC = ({ children }) => {
+export const PostsProvider: React.FC<PropsWithChildren<{}>> = ({
+  children,
+}) => {
   const [state, dispatch] = useReducer(reducer, initialData);
 
   useEffect(() => {

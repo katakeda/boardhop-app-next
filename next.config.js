@@ -4,4 +4,6 @@ module.exports = {
   images: {
     domains: ['localhost', 'firebasestorage.googleapis.com'],
   },
+  output: 'standalone',
+  swcMinify: true,
 };

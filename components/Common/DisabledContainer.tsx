@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 
-export const DisabledContainer: React.FC = ({ children }) => {
+export const DisabledContainer: React.FC<PropsWithChildren<{}>> = ({
+  children,
+}) => {
   return (
     <div className="relative">
       <div className="absolute z-40 h-full w-full">

@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { AppProvider } from '../../contexts/AppContext';
 import { AuthProvider } from '../../contexts/AuthContext';
 import { DefaultFooter } from '../Footer/DefaultFooter';
 import { DefaultHeader } from '../Header/DefaultHeader';
 
-export const DefaultLayout: React.FC = ({ children }) => {
+export const DefaultLayout: React.FC<PropsWithChildren<{}>> = ({
+  children,
+}) => {
   return (
     <AppProvider>
       <AuthProvider>
@@ -12,9 +14,7 @@ export const DefaultLayout: React.FC = ({ children }) => {
           <header className="h-header">
             <DefaultHeader />
           </header>
-          <main className="h-main">
-            {children}
-          </main>
+          <main className="h-main">{children}</main>
           <footer className="h-footer">
             <DefaultFooter />
           </footer>

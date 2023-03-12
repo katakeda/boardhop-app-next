@@ -1,4 +1,9 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useState,
+} from 'react';
 import type { ErrorString } from '../types/common';
 
 interface AppData {
@@ -11,7 +16,7 @@ interface AppData {
 
 const AppContext: React.Context<AppData> = createContext({} as AppData);
 
-export const AppProvider: React.FC = ({ children }) => {
+export const AppProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<ErrorString>(null);
 
@@ -21,15 +26,15 @@ export const AppProvider: React.FC = ({ children }) => {
 
   const initialData = {
     title: 'BoardHop',
-    loading, toggleLoading,
-    error, toggleError,
-  }
+    loading,
+    toggleLoading,
+    error,
+    toggleError,
+  };
 
   return (
-    <AppContext.Provider value={initialData}>
-      {children}
-    </AppContext.Provider>
-  )
-}
+    <AppContext.Provider value={initialData}>{children}</AppContext.Provider>
+  );
+};
 
 export const useAppContext = () => useContext(AppContext);

@@ -27,6 +27,7 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!paymentIntentId || !paymentIntentClientSecret || !redirectStatus) {
     // TODO: Set redirect url
     // Invalid request. Redirect somewhere
+    return res.redirect(req.url ?? '/');
   }
 
   const paymentIntent = await stripe.paymentIntents.retrieve(
@@ -35,6 +36,7 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!paymentIntent) {
     // TODO: Set redirect url
     // Something went wrong. Redirect somewhere
+    return res.redirect(req.url ?? '/');
   }
 
   const status =
@@ -69,7 +71,7 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse) => {
     // TODO: Set redirect url
     // Should we rollback our paymentIntent?
     // Redirect somewhere
-    return res.redirect(req.url ?? '/')
+    return res.redirect(req.url ?? '/');
   }
 
   const order = await response.json();
