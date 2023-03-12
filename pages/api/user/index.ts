@@ -1,22 +1,26 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { ResponseData, User } from '../../../types/common';
-import { getUserResponse } from '../../../utils/user';
+import { getUserResponseApi } from '../../../utils/user';
 
 type Data = {
   user: User | null;
 } & ResponseData;
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  const response = await getUserResponse(req);
+  const response = await getUserResponseApi(req);
 
   if (response.status >= 400) {
-    return res.status(response.status).json({ user: null, error: response.statusText });
+    return res
+      .status(response.status)
+      .json({ user: null, error: response.statusText });
   }
 
   const responseData = await response.json();
 
-  return res.status(200).json({ user: convertResponseDataToUser(responseData) });
-}
+  return res
+    .status(200)
+    .json({ user: convertResponseDataToUser(responseData) });
+};
 
 const convertResponseDataToUser = (data: any): User => {
   return {
@@ -25,7 +29,7 @@ const convertResponseDataToUser = (data: any): User => {
     firstName: data.firstName,
     lastName: data.lastName,
     avatarUrl: data.avatarUrl,
-  }
-}
+  };
+};
 
 export default handler;

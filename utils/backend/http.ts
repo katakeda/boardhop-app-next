@@ -18,7 +18,8 @@ export const setCookie = (
   value: string,
   options: CookieSerializeOptions = {}
 ): NextResponse => {
-  return res.cookie(key, value, { ...defaultCookieOptions, ...options });
+  res.cookies.set(key, value, { ...defaultCookieOptions, ...options });
+  return res;
 };
 
 export const setApiCookie = (

@@ -1,12 +1,17 @@
-import { NextApiRequest } from "next";
-import { NextRequest } from "next/server";
-import { User } from "../types/common";
-import { USER_API_ENDPOINT, USER_LOGIN_API_ENDPOINT, USER_LOGOUT_API_ENDPOINT, USER_SIGNUP_API_ENDPOINT } from "./constants";
+import { NextApiRequest } from 'next';
+import { NextRequest } from 'next/server';
+import { User } from '../types/common';
+import {
+  USER_API_ENDPOINT,
+  USER_LOGIN_API_ENDPOINT,
+  USER_LOGOUT_API_ENDPOINT,
+  USER_SIGNUP_API_ENDPOINT,
+} from './constants';
 
 type UserResponse = {
   isLoading: boolean;
   isError: boolean;
-}
+};
 
 type GetUserResponse = {
   user: User;
@@ -24,17 +29,13 @@ interface LoginPayload {
   password: string;
 }
 
-export const getUserResponse = async (req: NextRequest | NextApiRequest) => {
-  const options = {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${req.cookies.boardhop_auth}`
-    },
-  }
+export const getUserResponse = async (req: NextRequest) => {
+  return _getUserResponse(req.cookies.get('boardhop_auth') ?? '');
+};
 
-  return await fetch(`${process.env.BACKEND_API_ENDPOINT}/user`, options);
-}
+export const getUserResponseApi = async (req: NextApiRequest) => {
+  return _getUserResponse(req.cookies.boardhop_auth ?? '');
+};
 
 export const signup = async (payload: SignupPayload) => {
   const options = {
@@ -52,7 +53,7 @@ export const signup = async (payload: SignupPayload) => {
       return {
         user: null,
         error: response.statusText,
-      }
+      };
     }
 
     const data = await response.json();
@@ -60,14 +61,14 @@ export const signup = async (payload: SignupPayload) => {
     return {
       user: data?.user ?? {},
       error: null,
-    }
+    };
   } catch (error) {
     return {
       user: null,
       error,
-    }
+    };
   }
-}
+};
 
 export const login = async (payload: LoginPayload) => {
   const options = {
@@ -85,7 +86,7 @@ export const login = async (payload: LoginPayload) => {
       return {
         user: null,
         error: response.statusText,
-      }
+      };
     }
 
     const data = await response.json();
@@ -94,14 +95,14 @@ export const login = async (payload: LoginPayload) => {
       user: data?.user ?? {},
       error: null,
       redirectUrl: data?.redirectUrl,
-    }
+    };
   } catch (error) {
     return {
       user: null,
       error,
-    }
+    };
   }
-}
+};
 
 export const logout = async (): Promise<boolean> => {
   const options = {
@@ -120,7 +121,7 @@ export const logout = async (): Promise<boolean> => {
   } catch (error) {
     return false;
   }
-}
+};
 
 export const getUser = async () => {
   try {
@@ -129,17 +130,17 @@ export const getUser = async () => {
     return {
       user: data?.user ?? {},
       error: null,
-    }
+    };
   } catch (error) {
     return { user: null, error };
   }
-}
+};
 
 const userFetcher = async (url: string) => {
   const options = {
     method: 'GET',
     headers: { credentials: 'include' },
-  }
+  };
 
   const response = await fetch(url, options);
 
@@ -151,4 +152,16 @@ const userFetcher = async (url: string) => {
   }
 
   return await response.json();
+};
+
+const _getUserResponse = async (token: string) => {
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return await fetch(`${process.env.BACKEND_API_ENDPOINT}/user`, options);
 };
