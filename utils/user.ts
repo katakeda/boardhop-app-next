@@ -1,12 +1,6 @@
 import { NextApiRequest } from 'next';
 import { NextRequest } from 'next/server';
 import { User } from '../types/common';
-import {
-  USER_API_ENDPOINT,
-  USER_LOGIN_API_ENDPOINT,
-  USER_LOGOUT_API_ENDPOINT,
-  USER_SIGNUP_API_ENDPOINT,
-} from './constants';
 
 type UserResponse = {
   isLoading: boolean;
@@ -47,7 +41,7 @@ export const signup = async (payload: SignupPayload) => {
   };
 
   try {
-    const response = await fetch(USER_SIGNUP_API_ENDPOINT, options);
+    const response = await fetch('/api/user/signup', options);
 
     if (response.status >= 300) {
       return {
@@ -80,7 +74,7 @@ export const login = async (payload: LoginPayload) => {
   };
 
   try {
-    const response = await fetch(USER_LOGIN_API_ENDPOINT, options);
+    const response = await fetch('/api/user/login', options);
 
     if (response.status >= 300) {
       return {
@@ -111,7 +105,7 @@ export const logout = async (): Promise<boolean> => {
   };
 
   try {
-    const response = await fetch(USER_LOGOUT_API_ENDPOINT, options);
+    const response = await fetch('/api/user/logout', options);
 
     if (response.status >= 300) {
       return false;
@@ -125,7 +119,7 @@ export const logout = async (): Promise<boolean> => {
 
 export const getUser = async () => {
   try {
-    const data = await userFetcher(USER_API_ENDPOINT);
+    const data = await userFetcher('/api/user');
 
     return {
       user: data?.user ?? {},

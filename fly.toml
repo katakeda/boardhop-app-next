@@ -1,0 +1,47 @@
+# fly.toml file generated for boardhop-app-next on 2023-03-12T12:31:34-07:00
+
+app = "boardhop-app-next"
+kill_signal = "SIGINT"
+kill_timeout = 5
+primary_region = "lax"
+processes = []
+
+[env]
+  NEXT_PUBLIC_APP_URL                     = "https://boardhop-app-next.fly.dev"
+  BACKEND_API_ENDPOINT                    = "https://boardhop-api-service-go.fly.dev"
+  FIREBASE_AUTH_DOMAIN                    = "boardhop-dev.firebaseapp.com"
+  FIREBASE_PROJECT_ID                     = "boardhop-dev"
+  FIREBASE_STORAGE_BUCKET                 = "boardhop-dev.appspot.com"
+  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN        = "boardhop-dev.firebaseapp.com"
+  NEXT_PUBLIC_FIREBASE_PROJECT_ID         = "boardhop-dev"
+  NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET     = "boardhop-dev.appspot.com"
+  NEXT_PUBLIC_CDN_URL                     = "https://firebasestorage.googleapis.com/v0/b/boardhop-dev.appspot.com/o"
+
+[experimental]
+  auto_rollback = true
+
+[[services]]
+  http_checks = []
+  internal_port = 3000
+  processes = ["app"]
+  protocol = "tcp"
+  script_checks = []
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "connections"
+
+  [[services.ports]]
+    force_https = true
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [[services.tcp_checks]]
+    grace_period = "1s"
+    interval = "15s"
+    restart_limit = 0
+    timeout = "2s"

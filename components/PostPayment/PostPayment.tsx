@@ -7,10 +7,7 @@ import {
 import { StripeError } from '@stripe/stripe-js';
 import { Post } from '../../types/common';
 import { currencyFormat } from '../../utils/common';
-import {
-  PAYMENT_COMPLETE_API_ENDPOINT,
-  PAYMENT_INTENT_API_ENDPOINT,
-} from '../../utils/constants';
+import { APP_URL } from '../../utils/constants';
 import { DefaultDatePicker } from '../Common/DefaultDatePicker';
 import { SpinIcon } from '../Common/SpinIcon';
 
@@ -74,7 +71,7 @@ export const PostPayment: React.FC<{ post: Post; clientSecret: string }> = ({
       }),
     };
     const response = await fetch(
-      `${PAYMENT_INTENT_API_ENDPOINT}/${paymentIntent?.id}`,
+      `/api/payment/intent/${paymentIntent?.id}`,
       options
     );
     if (response.status >= 300) {
@@ -87,7 +84,7 @@ export const PostPayment: React.FC<{ post: Post; clientSecret: string }> = ({
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: PAYMENT_COMPLETE_API_ENDPOINT,
+        return_url: `${APP_URL}/api/payment/complete`,
       },
     });
 

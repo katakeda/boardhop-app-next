@@ -3,8 +3,11 @@ import { UserIcon } from '@heroicons/react/outline';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { Order, OrderStatus } from '../../types/common';
-import { currencyFormat, getOrderStatusData, sortByNewest } from '../../utils/common';
-import { API_ENDPOINT } from '../../utils/constants';
+import {
+  currencyFormat,
+  getOrderStatusData,
+  sortByNewest,
+} from '../../utils/common';
 import { getOrder } from '../../utils/frontend/orders';
 import { DefaultLoading } from '../Common/DefaultLoading';
 
@@ -38,7 +41,7 @@ export const ReceiptDetail: React.FC = () => {
       }),
     };
 
-    const response = await fetch(`${API_ENDPOINT}/messages`, options);
+    const response = await fetch('/api/messages', options);
     if (response.status >= 300) {
       return setMsgError('メッセージの送信中にエラーが発生しました');
     }
@@ -84,33 +87,34 @@ export const ReceiptDetail: React.FC = () => {
         >
           送信する
         </button>
-        {order.messages && order.messages.sort(sortByNewest).map((msgObj) => (
-          <div
-            className="flex items-center space-x-5 w-full my-3"
-            key={msgObj.id}
-          >
-            <span>
-              {msgObj.avatarUrl ? (
-                <span className="flex relative h-10 w-10 rounded-full border border-gray-300">
-                  <Image
-                    className="rounded-full"
-                    src={msgObj.avatarUrl}
-                    alt="user-avatar"
-                    layout="fill"
-                    objectFit="cover"
-                  />
-                </span>
-              ) : (
-                <span className="flex items-center justify-center p-2 h-10 w-10 rounded-full border border-gray-300 bg-gray-100">
-                  <UserIcon className="h-6 w-6" />
-                </span>
-              )}
-            </span>
-            <span className="w-full p-2 rounded-md shadow-md font-sans text-sm text-gray-700">
-              {msgObj.message}
-            </span>
-          </div>
-        ))}
+        {order.messages &&
+          order.messages.sort(sortByNewest).map((msgObj) => (
+            <div
+              className="flex items-center space-x-5 w-full my-3"
+              key={msgObj.id}
+            >
+              <span>
+                {msgObj.avatarUrl ? (
+                  <span className="flex relative h-10 w-10 rounded-full border border-gray-300">
+                    <Image
+                      className="rounded-full"
+                      src={msgObj.avatarUrl}
+                      alt="user-avatar"
+                      layout="fill"
+                      objectFit="cover"
+                    />
+                  </span>
+                ) : (
+                  <span className="flex items-center justify-center p-2 h-10 w-10 rounded-full border border-gray-300 bg-gray-100">
+                    <UserIcon className="h-6 w-6" />
+                  </span>
+                )}
+              </span>
+              <span className="w-full p-2 rounded-md shadow-md font-sans text-sm text-gray-700">
+                {msgObj.message}
+              </span>
+            </div>
+          ))}
       </div>
     </div>
   );

@@ -7,7 +7,6 @@ import {
   Rate,
   User,
 } from '../../types/common';
-import { POSTS_API_ENDPOINT } from '../constants';
 
 export const getPosts = async (
   postsParams: PostsParams
@@ -37,10 +36,7 @@ export const getPosts = async (
 
   try {
     const options = { method: 'GET' };
-    const response = await fetch(
-      `${POSTS_API_ENDPOINT}?${queryArr.join('&')}`,
-      options
-    );
+    const response = await fetch(`/api/posts?${queryArr.join('&')}`, options);
 
     if (response.status >= 300) {
       return {
@@ -76,7 +72,7 @@ export const getPost = async (
 
   try {
     const options = { method: 'GET' };
-    const response = await fetch(`${POSTS_API_ENDPOINT}/${id}`, options);
+    const response = await fetch(`/api/posts/${id}`, options);
 
     if (response.status >= 300) {
       return {
@@ -110,7 +106,7 @@ export const createPost = async (
   };
 
   try {
-    const response = await fetch(POSTS_API_ENDPOINT, options);
+    const response = await fetch('/api/posts', options);
 
     if (response.status >= 300) {
       return {
@@ -144,7 +140,7 @@ export const updatePost = async (
   };
 
   try {
-    const response = await fetch(`${POSTS_API_ENDPOINT}/${id}`, options);
+    const response = await fetch(`/api/posts/${id}`, options);
 
     if (response.status >= 300) {
       return {

@@ -1,5 +1,4 @@
 import { Category } from '../../types/common';
-import { CATEGORIES_API_ENDPOINT } from '../constants';
 
 export const getCategories = async (): Promise<{
   categories: Array<Category> | null;
@@ -7,7 +6,7 @@ export const getCategories = async (): Promise<{
 }> => {
   try {
     const options = { method: 'GET' };
-    const response = await fetch(CATEGORIES_API_ENDPOINT, options);
+    const response = await fetch('/api/categories', options);
 
     if (response.status >= 300) {
       return {

@@ -1,5 +1,4 @@
 import { Order } from '../../types/common';
-import { ORDERS_API_ENDPOINT } from '../constants';
 
 export const getOrders = async (): Promise<{
   orders: Array<Order> | null;
@@ -7,7 +6,7 @@ export const getOrders = async (): Promise<{
 }> => {
   try {
     const options = { method: 'GET' };
-    const response = await fetch(ORDERS_API_ENDPOINT, options);
+    const response = await fetch('/api/orders', options);
 
     if (response.status == 404) {
       return {
@@ -49,7 +48,7 @@ export const getOrder = async (
 
   try {
     const options = { method: 'GET' };
-    const response = await fetch(`${ORDERS_API_ENDPOINT}/${id}`, options);
+    const response = await fetch(`/api/orders/${id}`, options);
 
     if (response.status >= 300) {
       return {

@@ -1,14 +1,9 @@
-import { TagsParams } from "../../types/common";
-import { TAGS_API_ENDPOINT } from "../constants";
-
+import { TagsParams } from '../../types/common';
 
 export const getTags = async (params: TagsParams) => {
   try {
     const options = { method: 'GET' };
-    const response = await fetch(
-      `${TAGS_API_ENDPOINT}?type=${params.type}`,
-      options
-    );
+    const response = await fetch(`/api/tags?type=${params.type}`, options);
 
     if (response.status >= 300) {
       return {

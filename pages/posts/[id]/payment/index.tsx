@@ -10,10 +10,7 @@ import type {
   PaymentIntentItem,
   Post,
 } from '../../../../types/common';
-import {
-  MAX_QUANTITY,
-  PAYMENT_INTENT_API_ENDPOINT,
-} from '../../../../utils/constants';
+import { MAX_QUANTITY } from '../../../../utils/constants';
 import { getPost } from '../../../../utils/frontend/posts';
 
 const stripePromise = loadStripe(
@@ -41,7 +38,7 @@ const PostPaymentPage: NextPageWithLayout = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ items }),
         };
-        const response = await fetch(PAYMENT_INTENT_API_ENDPOINT, options);
+        const response = await fetch('/api/payment/intent', options);
         const data = await response.json();
         setClientSecret(data.clientSecret);
       })();
